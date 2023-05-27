@@ -1,0 +1,35 @@
+@import "src/styles/colors";
+
+@mixin tab {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 0 40px 24px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  &:hover {
+    color: $primary;
+    cursor: pointer;
+  }
+}
+
+.tab {
+  @include tab();
+}
+
+.active {
+  border-bottom: 2px solid $secondary;
+  &:hover {
+    border-bottom: 2px solid $primary;
+  }
+}
+
+.disabled {
+  color: $gray;
+  &:hover {
+    cursor: not-allowed;
+    color: $gray;
+  }
+}
