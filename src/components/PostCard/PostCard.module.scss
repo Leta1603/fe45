@@ -6,27 +6,60 @@
   box-sizing: border-box;
 }
 
+//общие стили
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: $gray;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.cardImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.iconsWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 40px;
+  border-bottom: 1px solid $medium;
+}
+
+.icons {
+  display: flex;
+  gap: 25px;
+}
+
+.icon {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// large
+
 .large {
   max-width: 736px;
 
   .content {
-    display: flex;
-    justify-content: space-between;
     gap: 32px;
     margin-bottom: 31px;
   }
 
   .contentText {
     max-width: 442px;
-  }
-
-  .date {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: $gray;
-    display: block;
-    margin-bottom: 8px;
   }
 
   .cardTitle {
@@ -53,32 +86,6 @@
     width: 256px;
     height: 244px;
   }
-
-  .cardImg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .iconsWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 0 40px;
-    border-bottom: 1px solid $medium;
-  }
-
-  .icons {
-    display: flex;
-    gap: 25px;
-  }
-
-  .icon {
-    &:hover {
-      cursor: pointer;
-    }
-  }
 }
 
 //medium
@@ -87,23 +94,12 @@
   max-width: 352px;
 
   .content {
-    display: flex;
-    justify-content: space-between;
     flex-direction: column-reverse;
-    // margin-bottom: 31px;
   }
 
   .contentText {
     max-width: 100%;
-  }
-
-  .date {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: $gray;
-    display: block;
-    margin-bottom: 8px;
+    margin-bottom: 28px;
   }
 
   .cardTitle {
@@ -111,7 +107,6 @@
     font-size: 18px;
     line-height: 28px;
     color: $secondary;
-    margin-bottom: 24px;
 
     &:hover {
       cursor: pointer;
@@ -119,40 +114,10 @@
     }
   }
 
-  .text {
-    display: none;
-  }
-
   .cardImg {
     width: 352px;
     height: 246px;
     margin-bottom: 24px;
-  }
-
-  .cardImg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .iconsWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 0 40px;
-    border-bottom: 1px solid $medium;
-  }
-
-  .icons {
-    display: flex;
-    gap: 25px;
-  }
-
-  .icon {
-    &:hover {
-      cursor: pointer;
-    }
   }
 }
 
@@ -162,8 +127,6 @@
   max-width: 352px;
 
   .content {
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 24px;
   }
 
@@ -171,21 +134,11 @@
     max-width: 222px;
   }
 
-  .date {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: $gray;
-    display: block;
-    margin-bottom: 8px;
-  }
-
   .cardTitle {
     font-weight: 600;
     font-size: 18px;
     line-height: 28px;
     color: $secondary;
-    margin-bottom: 24px;
 
     &:hover {
       cursor: pointer;
@@ -193,38 +146,8 @@
     }
   }
 
-  .text {
-    display: none;
-  }
-
   .cardImg {
     width: 96px;
     height: 96px;
-  }
-
-  .cardImg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .iconsWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 0 40px;
-    border-bottom: 1px solid $medium;
-  }
-
-  .icons {
-    display: flex;
-    gap: 25px;
-  }
-
-  .icon {
-    &:hover {
-      cursor: pointer;
-    }
   }
 }

@@ -27,8 +27,8 @@ const PostCard: FC<PostCardProps> = ({ id, image, title, text, date, lesson_num,
       <div className={styles.content}>
         <div className={styles.contentText}>
           <span className={styles.date}>{date}</span>
-          <h3 className={styles.cardTitle}>{title}</h3>
-          <p className={styles.text}>{text}</p>
+          <div className={styles.cardTitle}>{title}</div>
+          {size === PostCardSize.Large && <p className={styles.text}>{text}</p>}
         </div>
         <div className={styles.cardImg}>
           <img src={image} alt="imagePost" />
