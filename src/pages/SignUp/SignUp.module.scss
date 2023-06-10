@@ -19,3 +19,10 @@
   justify-content: center;
   margin-top: 24px;
 }
+
+.darkAdditionalInfo {
+  color: $medium;
+  .signIn {
+    color: $primary-secondary;
+  }
+}

@@ -36,3 +36,13 @@
 .button {
   margin-top: 48px;
 }
+
+.darkContainer {
+  background-color: $secondary;
+  .breadcrumbs {
+    color: $white;
+  }
+  .formContainer {
+    border-color: $gray;
+  }
+}
