@@ -14,7 +14,7 @@ const Tab: FC<TabProps> = ({ title, onClick, active, disabled }) => {
   return (
     <button
       onClick={!disabled ? onClick : undefined}
-      className={classNames(styles.tab, { [styles.disabled]: disabled }, { [styles.active]: active })}
+      className={classNames(styles.tab, { [styles.disabled]: disabled, [styles.active]: active })}
     >
       {title}
     </button>
