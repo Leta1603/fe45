@@ -1,12 +1,11 @@
 @import "/src/styles/colors.scss";
 
 @mixin Title {
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 56px;
   line-height: 80px;
-  margin-bottom: 40px;
 }
 .title {
   @include Title();

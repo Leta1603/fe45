@@ -1,0 +1,16 @@
+.cardListcontainer {
+  display: flex;
+  gap: 32px;
+}
+.small {
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+.medium {
+  max-width: 740px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 39px;
+  gap: 40px 32px;
+}

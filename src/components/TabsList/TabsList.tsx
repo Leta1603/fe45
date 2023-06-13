@@ -1,15 +1,28 @@
-import React from "react";
+import React, { FC } from "react";
 import Tab from "../Tab";
 import classNames from "classnames";
 
 import styles from "./TabsList.module.scss";
+import { TabsListType, TabsTypes } from "../../@types";
 
-const TabsList = () => {
+type TabsListProps = {
+  tabsList: TabsListType;
+  activeTab: TabsTypes;
+  onTabClick: (tab: TabsTypes) => () => void;
+};
+
+const TabsList: FC<TabsListProps> = ({ tabsList, activeTab, onTabClick }) => {
   return (
-    <div className={classNames(styles.tabsList)}>
-      <Tab active title={"All"} onClick={() => {}} />
-      <Tab title={"My favorites"} onClick={() => {}} />
-      <Tab disabled title={"Popular"} onClick={() => {}} />
+    <div className={styles.tabsContainer}>
+      {tabsList.map(({ key, title, disabled }) => (
+        <Tab
+          key={key}
+          title={title}
+          onClick={onTabClick(key)} //() => (tab) => setTab(tab)
+          active={activeTab === key}
+          disabled={disabled}
+        />
+      ))}
     </div>
   );
 };

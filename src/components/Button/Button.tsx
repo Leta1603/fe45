@@ -14,14 +14,17 @@ type ButtonProps = {
   title: string | ReactElement;
   onClick: () => void;
   disabled?: boolean;
+  className?: string;
 };
 
-const Button: FC<ButtonProps> = ({ type, title, onClick, disabled }) => {
+const Button: FC<ButtonProps> = ({ type, title, onClick, disabled, className }) => {
   const buttonStyle = styles[type];
   return (
     <div
       onClick={!disabled ? onClick : undefined}
-      className={classNames(buttonStyle, { [styles.disabled]: disabled })}
+      className={classNames(buttonStyle, className, {
+        [styles.disabled]: disabled,
+      })}
     >
       {title}
     </div>
