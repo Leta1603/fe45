@@ -19,10 +19,10 @@ const Tab: FC<TabProps> = ({ title, onClick, active, disabled }) => {
       onClick={!disabled ? onClick : undefined}
       className={classNames(
         styles.tab,
-        { [styles.disabled]: disabled },
-        { [styles.active]: active },
-        { [styles.darkTab]: themeValue === Theme.Dark },
-        { [styles.darkTabActive]: active && themeValue === Theme.Dark }
+        { [styles.disabled]: disabled,
+         [styles.active]: active,
+         [styles.darkTab]: themeValue === Theme.Dark,
+         [styles.darkTabActive]: active && themeValue === Theme.Dark }
       )}
     >
       {title}
