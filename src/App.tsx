@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { ThemeProvider } from "./context/Theme";
 import { Theme } from "./@types";
 import Router from "./pages/Router";
+import { useDispatch, useSelector } from "react-redux";
+import { ThemeSelectors, setThemeValue } from "./redux/reducers/themeSlice";
 
 const App = () => {
-  const [themeValue, setThemeValue] = useState<Theme>(Theme.Light);
+  const dispatch = useDispatch();
+
+  const themeValue = useSelector(ThemeSelectors.getThemeValue);
 
   const onChangeTheme = (value: Theme) => () => {
-    setThemeValue(value);
+    dispatch(setThemeValue(value)); // то, что швыряет в редакс данные
   };
 
   return (
