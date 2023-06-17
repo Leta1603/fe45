@@ -2,10 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import Title from "../../components/Title";
 import CardsList from "../../components/CardsList";
-import { PostsList, TabsTypes } from "../../@types";
+import { PostsList, TabsTypes, Theme } from "../../@types";
 
 import styles from "./Home.module.scss";
 import TabsList from "../../components/TabsList";
+
+import classNames from "classnames";
+import { useThemeContext } from "src/context/Theme";
 
 const MOCK_ARRAY = [
   {
@@ -147,6 +150,8 @@ const Home = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [cardsList, setCardsList] = useState<PostsList>([]);
 
+  const { themeValue } = useThemeContext();
+
   const tabsList = useMemo(
     () => [
       { key: TabsTypes.All, title: "All Posts", disabled: false },
@@ -172,7 +177,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className={classNames(styles.iconsWrapper, { [styles.darkContainer]: themeValue === Theme.Dark })}>
       <Title title={"Blog"} className={styles.pageTitle} />
       <TabsList tabsList={tabsList} activeTab={activeTab} onTabClick={onTabClick} />
       <CardsList cardsList={cardsList} />

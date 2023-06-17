@@ -38,6 +38,10 @@
   border-bottom: 1px solid $medium;
 }
 
+.darkIconsWrapper {
+  border-color: $gray;
+}
+
 .icons {
   display: flex;
   gap: 25px;
@@ -46,6 +50,9 @@
 .icon {
   &:hover {
     cursor: pointer;
+    svg > path {
+      fill: $primary;
+    }
   }
 }
 
@@ -87,6 +94,21 @@
     width: 256px;
     height: 244px;
   }
+
+  .darkTabTitle {
+    color: $white;
+  }
+
+  .darkIcon {
+    svg > path {
+      fill: $white;
+    }
+    &:hover {
+      svg > path {
+        fill: $primary;
+      }
+    }
+  }
 }
 
 //medium
@@ -120,6 +142,21 @@
     height: 246px;
     margin-bottom: 24px;
   }
+
+  .darkTabTitle {
+    color: $white;
+  }
+
+  .darkIcon {
+    svg > path {
+      fill: $white;
+    }
+    &:hover {
+      svg > path {
+        fill: $primary;
+      }
+    }
+  }
 }
 
 //small
@@ -150,5 +187,20 @@
   .cardImg {
     width: 96px;
     height: 96px;
+  }
+
+  .darkTabTitle {
+    color: $white;
+  }
+
+  .darkIcon {
+    svg > path {
+      fill: $white;
+    }
+    &:hover {
+      svg > path {
+        fill: $primary;
+      }
+    }
   }
 }
