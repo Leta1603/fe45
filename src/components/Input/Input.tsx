@@ -7,13 +7,14 @@ import { Theme } from "src/@types";
 import styles from "./Input.module.scss";
 
 type InputProps = {
-  title: string;
+  title?: string;
   placeholder: string;
   onChange: (value: string) => void;
   value: string;
   disabled?: boolean;
   errorText?: string;
   isTextarea?: boolean;
+  className?: string;
 };
 
 const Input = forwardRef<
@@ -27,7 +28,7 @@ const Input = forwardRef<
     // а 2 - это ваша рефа
     ref
   ) => {
-    const { title, errorText, placeholder, onChange, disabled, value, isTextarea } = props;
+    const { title, errorText, placeholder, onChange, disabled, value, isTextarea, className } = props;
 
     const { themeValue } = useThemeContext();
 
@@ -39,7 +40,7 @@ const Input = forwardRef<
       onChange: onInputChange,
       value,
       placeholder,
-      className: classNames(styles.input, {
+      className: classNames(styles.input, className, {
         [styles.disabled]: disabled,
         [styles.errorInput]: errorText,
       }),
@@ -47,7 +48,7 @@ const Input = forwardRef<
 
     return (
       <div
-        className={classNames(styles.container, {
+        className={classNames(styles.container, className, {
           [styles.darkContainer]: themeValue === Theme.Dark,
         })}
       >

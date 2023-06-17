@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
 import { ThemeProvider } from "./context/Theme";
-import ThemeSwitcher from "./components/ThemeSwitcher";
 import { Theme } from "./@types";
-import Home from "./pages/Home/Home";
+import Router from "./pages/Router";
 
 const App = () => {
   const [themeValue, setThemeValue] = useState<Theme>(Theme.Light);
@@ -14,8 +13,7 @@ const App = () => {
 
   return (
     <ThemeProvider themeValue={themeValue} onChangeTheme={onChangeTheme}>
-      <Home />
-      <ThemeSwitcher />
+      <Router />
     </ThemeProvider>
   );
 };
