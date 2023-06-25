@@ -27,7 +27,7 @@ const SelectedPostModal = () => {
 
   return selectedPost ? (
     <Modal isOpen={isOpened} onClose={onCloseModal}>
-      <PostCard size={PostCardSize.Large} {...selectedPost} onImageClick={onImageClick(selectedPost.image)} />
+      <PostCard size={PostCardSize.Large} {...selectedPost} onImageClick={onImageClick(selectedPost.image)} onStatusClick={(_)=> {}} onFavouriteClick={() => {}} />
     </Modal>
   ) : null;
 };
