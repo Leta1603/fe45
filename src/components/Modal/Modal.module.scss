@@ -1,0 +1,25 @@
+@import "src/styles/colors.scss";
+
+.overlay {
+  background-color: rgba(38, 34, 47, 0.5);
+}
+
+.containerModal {
+  position: relative;
+  background-color: $white;
+  width: 886px;
+  height: 588px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeModal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
