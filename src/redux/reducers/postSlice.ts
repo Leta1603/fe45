@@ -9,6 +9,7 @@ type InitialState = {
   likedPosts: PostsList;
   dislikedPosts: PostsList;
   favouritesPosts: PostsList;
+  postList: PostsList;
 };
 
 const initialState: InitialState = {
@@ -17,6 +18,7 @@ const initialState: InitialState = {
   likedPosts: [],
   dislikedPosts: [],
   favouritesPosts: [],
+  postList: [],
 };
 
 const postSlice = createSlice({
@@ -54,20 +56,32 @@ const postSlice = createSlice({
         state[secondaryKey].splice(secondaryIndex, 1);
       }
     },
-    setFavouritesPosts: (state, action: PayloadAction<{card: Post}>) => {
-      const {card} = action.payload;
-      const favouriteIndex = state.favouritesPosts.findIndex((item) => item.id === card.id);
-      if (favouriteIndex === -1){
+    setFavouritesPosts: (state, action: PayloadAction<{ card: Post }>) => {
+      const { card } = action.payload;
+      const favouriteIndex = state.favouritesPosts.findIndex(
+        (item) => item.id === card.id
+      );
+      if (favouriteIndex === -1) {
         state.favouritesPosts.push(card);
-      }else{
+      } else {
         state.favouritesPosts.splice(favouriteIndex, 1);
       }
-}
+    },
+    getPostList: (_, __: PayloadAction<undefined>) => {},
+    setPostList: (state, action: PayloadAction<PostsList>) => {
+      state.postList = action.payload;
+    },
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
 
-export const { setSelectedPostModalOpened, setSelectedPost, setLikeStatus, setFavouritesPosts } =
-  postSlice.actions;
+export const {
+  setSelectedPostModalOpened,
+  setSelectedPost,
+  setLikeStatus,
+  setFavouritesPosts,
+  getPostList,
+  setPostList,
+} = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
 
@@ -78,6 +92,7 @@ export const PostSelectors = {
   getLikedPosts: (state: RootState) => state.postReducer.likedPosts,
   getDislikedPosts: (state: RootState) => state.postReducer.dislikedPosts,
   getFavouritePosts: (state: RootState) => state.postReducer.favouritesPosts,
+  getPostList: (state: RootState) => state.postReducer.postList,
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)
 
