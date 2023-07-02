@@ -10,7 +10,7 @@ export enum RoutesList {
   Home = "/",
   SignUp = "/sign-up",
   SignIn = "/sign-in",
-  RegistrationConfirmation = "/sign-up/confirm",
+  RegistrationConfirmation = "/activate/:uid/:token",
   Default = "*",
 }
 
