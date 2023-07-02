@@ -1,45 +1,78 @@
-import React, { FC } from "react";
-import Title from "../../components/Title/Title";
-
-import styles from "./SelectedPost.module.scss";
-import { BookmarkIcon, DislikeIcon, LikeIcon } from "src/components/assets/icons";
-import { useThemeContext } from "src/context/Theme";
-
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import classNames from "classnames";
+import { useDispatch, useSelector } from "react-redux";
+
+import Title from "../../components/Title/Title";
+import styles from "./SelectedPost.module.scss";
+import {
+  BookmarkIcon,
+  DislikeIcon,
+  LikeIcon,
+} from "src/components/assets/icons";
+import { useThemeContext } from "src/context/Theme";
 import { Theme } from "src/@types";
+import { getSinglePost, PostSelectors } from "src/redux/reducers/postSlice";
+import { RoutesList } from "src/pages/Router";
 
-type SelectedPostProps = {
-  id: number;
-  title: string;
-  image: string;
-  text: string;
-};
-
-const SelectedPost: FC<SelectedPostProps> = ({ id, title, image, text }) => {
+const SelectedPost = () => {
   const { themeValue } = useThemeContext();
-  return (
-    <div className={classNames(styles.container, { [styles.darkContainer]: themeValue === Theme.Dark })}>
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const singlePost = useSelector(PostSelectors.getSinglePost);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getSinglePost(id));
+    }
+  }, [id]);
+
+  const onHomeClick = () => {
+    navigate(RoutesList.Home);
+  };
+
+  return singlePost ? (
+    <div
+      className={classNames(styles.container, {
+        [styles.darkContainer]: themeValue === Theme.Dark,
+      })}
+    >
       <div
-        className={classNames(styles.breadcrumbs, { [styles.darkBreadcrumbs]: themeValue === Theme.Dark })}
+        className={classNames(styles.breadcrumbs, {
+          [styles.darkBreadcrumbs]: themeValue === Theme.Dark,
+        })}
       >
-        <span className={styles.link}>Home&nbsp;</span>
-        <span>| Post {id}</span>
+        <span onClick={onHomeClick} className={styles.link}>Home&nbsp;</span>
+        <span>| Post {singlePost.id}</span>
       </div>
-      <Title title={title} />
+      <Title title={singlePost.title} />
       <div className={styles.postContainer}>
         <div className={styles.postImg}>
-          <img src={image} alt="photo" />
+          <img src={singlePost.image} alt="photo" />
         </div>
         <div className={styles.textAndIconsContainer}>
-          <div className={classNames(styles.text, { [styles.darkText]: themeValue === Theme.Dark })}>
-            {text}
+          <div
+            className={classNames(styles.text, {
+              [styles.darkText]: themeValue === Theme.Dark,
+            })}
+          >
+            {singlePost.text}
           </div>
           <div className={styles.iconsWrapper}>
             <div className={styles.icons}>
-              <div className={classNames(styles.icon, { [styles.darkIcon]: themeValue === Theme.Dark })}>
+              <div
+                className={classNames(styles.icon, {
+                  [styles.darkIcon]: themeValue === Theme.Dark,
+                })}
+              >
                 <LikeIcon />
               </div>
-              <div className={classNames(styles.icon, { [styles.darkIcon]: themeValue === Theme.Dark })}>
+              <div
+                className={classNames(styles.icon, {
+                  [styles.darkIcon]: themeValue === Theme.Dark,
+                })}
+              >
                 <DislikeIcon />
               </div>
             </div>
@@ -53,7 +86,7 @@ const SelectedPost: FC<SelectedPostProps> = ({ id, title, image, text }) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SelectedPost;

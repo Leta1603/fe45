@@ -8,6 +8,8 @@ import { useThemeContext } from "src/context/Theme";
 import { Theme } from "src/@types";
 import { useDispatch } from "react-redux";
 import { signUpUser } from "src/redux/reducers/authSlice";
+import { useNavigate } from "react-router-dom";
+import { RoutesList } from "src/pages/Router";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -15,6 +17,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { themeValue } = useThemeContext();
 
@@ -26,6 +29,10 @@ const SignUp = () => {
       inputRef.current.focus();
     }
   }, []);
+
+  const onSignInClick = () => {
+    navigate(RoutesList.SignIn);
+  };
 
   const onSubmit = () => {
     const data = {
@@ -48,7 +55,9 @@ const SignUp = () => {
           })}
         >
           {"Already have an account?"}
-          <span className={styles.signIn}>Sign In</span>
+          <span onClick={onSignInClick} className={styles.signIn}>
+            Sign In
+          </span>
         </div>
       }
     >
