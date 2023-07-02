@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-export type Post = {
+export interface Post {
   id: number;
   image: string;
   text?: string;
@@ -29,3 +29,14 @@ export enum Theme {
   Light = "light",
   Dark = "dark",
 }
+
+export enum LikeStatus {
+  Like = 'like',
+  Dislike = 'dislike',
+}
+
+export enum FavouriteStatus {
+  Favourite = "favourite",
+  NotFavourite = "notFavourite"
+}
+

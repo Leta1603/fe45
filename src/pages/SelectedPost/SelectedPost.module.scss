@@ -1,6 +1,6 @@
 @import "src/styles/colors";
 .container {
-  max-width: 1120px;
+  width: 1120px;
 }
 
 .breadcrumbs {
@@ -57,6 +57,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 70px;
   border-bottom: 1px solid $medium;
 }
 
@@ -80,6 +81,7 @@
 .favorite {
   padding: 16px 32px;
   background-color: $light;
+  color: $secondary;
   display: flex;
   align-items: center;
   gap: 10px;
