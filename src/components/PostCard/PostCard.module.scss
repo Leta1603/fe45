@@ -22,6 +22,10 @@
   margin-bottom: 8px;
 }
 
+.cardImg:hover {
+  cursor: pointer;
+}
+
 .cardImg img {
   width: 100%;
   height: 100%;
@@ -47,6 +51,9 @@
 }
 
 .icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   &:hover {
     cursor: pointer;
     svg > path {
@@ -99,6 +106,7 @@
   }
 
   .darkIcon {
+    color: $white;
     svg > path {
       fill: $white;
     }
@@ -147,6 +155,7 @@
   }
 
   .darkIcon {
+    color: $white;
     svg > path {
       fill: $white;
     }
@@ -194,6 +203,7 @@
   }
 
   .darkIcon {
+    color: $white;
     svg > path {
       fill: $white;
     }

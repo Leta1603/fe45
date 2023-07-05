@@ -7,6 +7,8 @@ import { Children, Theme } from "src/@types";
 
 import classNames from "classnames";
 import { useThemeContext } from "src/context/Theme";
+import { useNavigate } from "react-router-dom";
+import { RoutesList } from "src/pages/Router";
 
 type FormPagesContainerProps = {
   title: string;
@@ -24,6 +26,11 @@ const FormPagesContainer: FC<FormPagesContainerProps> = ({
   additionalInfo,
 }) => {
   const { themeValue } = useThemeContext();
+  const navigate = useNavigate();
+
+  const onBackToHomeClick = () => {
+    navigate(RoutesList.Home);
+  };
 
   return (
     <div
@@ -31,11 +38,18 @@ const FormPagesContainer: FC<FormPagesContainerProps> = ({
         [styles.darkContainer]: themeValue === Theme.Dark,
       })}
     >
-      <div className={styles.breadcrumbs}>Back to home</div>
+      <div onClick={onBackToHomeClick} className={styles.breadcrumbs}>
+        Back to home
+      </div>
       <Title title={title} />
       <div className={styles.formContainer}>
         <div className={styles.fieldsContainer}>{children}</div>
-        <Button type={ButtonTypes.Primary} title={btnTitle} onClick={onSubmit} className={styles.button} />
+        <Button
+          type={ButtonTypes.Primary}
+          title={btnTitle}
+          onClick={onSubmit}
+          className={styles.button}
+        />
         <div>{additionalInfo}</div>
       </div>
     </div>
