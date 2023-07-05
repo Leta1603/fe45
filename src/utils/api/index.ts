@@ -1,6 +1,10 @@
 import { create } from "apisauce";
 
-import { ActivateUserData, SignUpUserData } from "src/redux/@type";
+import {
+  ActivateUserData,
+  SignInUserData,
+  SignUpUserData,
+} from "src/redux/@type";
 
 const API = create({
   baseURL: "https://studapi.teachmeskills.by",
@@ -14,12 +18,35 @@ const getPosts = () => {
   return API.get("/blog/posts/?limit=12");
 };
 
-const getSinglePost = (id: string) =>{
+const getSinglePost = (id: string) => {
   return API.get(`/blog/posts/${id}/`);
-}
+};
 
 const activateUser = (data: ActivateUserData) => {
   return API.post("/auth/users/activation/", data);
 };
 
-export default { signUpUser, getPosts, activateUser, getSinglePost };
+const createToken = (data: SignInUserData) => {
+  return API.post("/auth/jwt/create/", data);
+};
+
+const getUserInfo = (token: string) => {
+  return API.get(
+    "/auth/users/me/",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export default {
+  signUpUser,
+  getPosts,
+  activateUser,
+  getSinglePost,
+  createToken,
+  getUserInfo,
+};

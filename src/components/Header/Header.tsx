@@ -12,11 +12,14 @@ import styles from "./Header.module.scss";
 import { Theme } from "src/@types";
 import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "../assets/icons";
 import Input from "../Input/Input";
+import { useSelector } from "react-redux";
+import { authSelectors } from "src/redux/reducers/authSlice";
 
 const Header = () => {
   const { themeValue } = useThemeContext();
 
-  const isLoggedIn = true;
+  const isLoggedIn = useSelector(authSelectors.getLoggedIn);
+  const userInfo = useSelector(authSelectors.getUserInfo);
 
   const [isOpened, setOpened] = useState(false);
   const [isSearch, setSearch] = useState(false);
@@ -82,12 +85,18 @@ const Header = () => {
             onClick={handleSearchOpened}
             className={styles.searchButton}
           />
-          <Button
-            type={ButtonTypes.Primary}
-            title={<UserIcon />}
-            onClick={onLoginButtonClick}
-            className={styles.userButton}
-          />
+          {isLoggedIn && userInfo ? (
+            <div className={styles.username}>
+              <Username username={userInfo.username} />
+            </div>
+          ) : (
+            <Button
+              type={ButtonTypes.Primary}
+              title={<UserIcon />}
+              onClick={onLoginButtonClick}
+              className={styles.userButton}
+            />
+          )}
         </div>
       </div>
       <div className={styles.infoContainer}>
@@ -104,9 +113,15 @@ const Header = () => {
       {isOpened && (
         <div className={styles.menuContainer}>
           <div>
-            {isLoggedIn && <Username username={"Violetta"} />}
+            {isLoggedIn && userInfo && (
+              <Username username={userInfo.username} />
+            )}
             {navLinks.map((link) => (
-              <NavLink to={link.path} key={link.path} className={styles.navLinkButton}>
+              <NavLink
+                to={link.path}
+                key={link.path}
+                className={styles.navLinkButton}
+              >
                 {link.title}
               </NavLink>
             ))}

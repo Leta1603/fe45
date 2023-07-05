@@ -23,7 +23,7 @@ export type ActivateUserData = {
   token: string;
 };
 
-export type SignUpUserPayload = PayloadWithDataAndCallback<SignUpUserData>
+export type SignUpUserPayload = PayloadWithDataAndCallback<SignUpUserData>;
 
 export type PostData = {
   count: number;
@@ -32,4 +32,22 @@ export type PostData = {
   results: PostsList;
 };
 
-export type ActivateUserPayload = PayloadWithDataAndCallback<ActivateUserData>
+export type ActivateUserPayload = PayloadWithDataAndCallback<ActivateUserData>;
+
+export type SignInUserData = {
+  email: string;
+  password: string;
+};
+
+export type SignInUserPayload = PayloadWithDataAndCallback<SignInUserData>;
+
+export type SignInUserResponse = {
+  access: string;
+  refresh: string;
+};
+
+export type UserInfoResponse = {
+  username: string;
+  id: number;
+  email: string;
+};

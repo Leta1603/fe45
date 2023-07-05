@@ -8,7 +8,7 @@ import {
 } from "../assets/icons";
 import classNames from "classnames";
 import { useThemeContext } from "src/context/Theme";
-import {LikeStatus, Post, Theme} from "src/@types";
+import { LikeStatus, Post, Theme } from "src/@types";
 import { useSelector } from "react-redux";
 import { PostSelectors } from "src/redux/reducers/postSlice";
 import { FilledBookmarkIcon } from "src/components/assets/icons/FilledBookmarkIcon";
@@ -20,14 +20,13 @@ export enum PostCardSize {
   Small = "small",
 }
 
-interface PostCardProps extends Post{
-
+interface PostCardProps extends Post {
   size: PostCardSize;
   onMoreClick?: () => void;
   onImageClick?: () => void;
   onStatusClick: (status: LikeStatus) => void;
   onFavouriteClick: () => void;
-};
+}
 
 const PostCard: FC<PostCardProps> = ({
   id,

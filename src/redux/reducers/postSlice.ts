@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
-import { FavouriteStatus, LikeStatus, Post, PostsList } from "src/@types";
+import { LikeStatus, Post, PostsList } from "src/@types";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
