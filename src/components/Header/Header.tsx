@@ -10,10 +10,10 @@ import classNames from "classnames";
 
 import styles from "./Header.module.scss";
 import { Theme } from "src/@types";
-import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "../assets/icons";
+import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "src/assets/icons";
 import Input from "../Input/Input";
-import { useSelector } from "react-redux";
-import { authSelectors } from "src/redux/reducers/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { authSelectors, logOutUser } from "src/redux/reducers/authSlice";
 
 const Header = () => {
   const { themeValue } = useThemeContext();
@@ -24,6 +24,7 @@ const Header = () => {
   const [isOpened, setOpened] = useState(false);
   const [isSearch, setSearch] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -45,6 +46,10 @@ const Header = () => {
 
   const onLoginButtonClick = () => {
     navigate(RoutesList.SignIn);
+  };
+
+  const onLogout = () => {
+    dispatch(logOutUser());
   };
 
   return (
@@ -131,7 +136,7 @@ const Header = () => {
             <Button
               type={ButtonTypes.Secondary}
               title={isLoggedIn ? "Log Out" : "Sign In"}
-              onClick={onLoginButtonClick}
+              onClick={isLoggedIn ? onLogout : onLoginButtonClick}
               className={styles.authButton}
             />
           </div>

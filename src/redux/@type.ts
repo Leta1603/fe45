@@ -51,3 +51,8 @@ export type UserInfoResponse = {
   id: number;
   email: string;
 };
+
+export type RefreshResponseData = {
+  access: string;
+};
+

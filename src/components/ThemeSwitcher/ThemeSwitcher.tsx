@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 import { useThemeContext } from "src/context/Theme";
-import { MoonIcon, SunIcon } from "src/components/assets/icons";
+import { MoonIcon, SunIcon } from "src/assets/icons";
 import styles from "./ThemeSwitcher.module.scss";
 import { Theme } from "../../@types";
 

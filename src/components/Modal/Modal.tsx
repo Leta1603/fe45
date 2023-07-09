@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import ReactModal from "react-modal";
 import { Children } from "src/@types";
-import { CloseIcon } from "../assets/icons";
+import { CloseIcon } from "src/assets/icons";
 
 import style from "./Modal.module.scss";
 
