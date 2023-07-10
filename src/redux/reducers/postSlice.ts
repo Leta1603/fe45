@@ -13,6 +13,7 @@ type InitialState = {
   singlePost: Post | null;
   singlePostLoading: boolean;
   myPosts: PostsList;
+  searchedPosts: PostsList;
 };
 
 const initialState: InitialState = {
@@ -25,6 +26,7 @@ const initialState: InitialState = {
   singlePost: null,
   singlePostLoading: false,
   myPosts: [],
+  searchedPosts: [],
 };
 
 const postSlice = createSlice({
@@ -88,6 +90,10 @@ const postSlice = createSlice({
     setMyPosts: (state, action: PayloadAction<PostsList>) => {
       state.myPosts = action.payload;
     },
+    getSearchedPosts: (_, __: PayloadAction<string>) => {},
+    setSearchedPosts: (state, action: PayloadAction<PostsList>) => {
+      state.searchedPosts = action.payload;
+    },
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
 
@@ -103,6 +109,8 @@ export const {
   setSinglePostLoading,
   getMyPosts,
   setMyPosts,
+  getSearchedPosts,
+  setSearchedPosts,
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
@@ -119,6 +127,7 @@ export const PostSelectors = {
   getSinglePostLoading: (state: RootState) =>
     state.postReducer.singlePostLoading,
   getMyPosts: (state: RootState) => state.postReducer.myPosts,
+  getSearchedPosts: (state: RootState) => state.postReducer.searchedPosts,
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)
 

@@ -14,8 +14,8 @@ const signUpUser = (data: SignUpUserData) => {
   return API.post("/auth/users/", data);
 };
 
-const getPosts = () => {
-  return API.get("/blog/posts/?limit=12");
+const getPosts = (search?: string) => {
+  return API.get("/blog/posts", { search, limit: 12 });
 };
 
 const getSinglePost = (id: string) => {

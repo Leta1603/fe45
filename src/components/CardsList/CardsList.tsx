@@ -1,46 +1,21 @@
 import React, { FC } from "react";
-import { LikeStatus, Post, PostsList } from "../../@types";
+import { PostsList } from "src/@types";
 import PostCard, { PostCardSize } from "../PostCard";
 import styles from "./CardsList.module.scss";
-import { useDispatch } from "react-redux";
-import {
-  setFavouritesPosts,
-  setLikeStatus,
-  setSelectedPost,
-  setSelectedPostModalOpened,
-} from "src/redux/reducers/postSlice";
-import {
-  setSelectedImage,
-  setSelectedImageModalOpened,
-} from "src/redux/reducers/imageSlice";
 import Loader from "src/components/Loader";
+import { useCardActions } from "src/hooks";
 
 type CardsListProps = {
   cardsList: PostsList;
 };
 
 const CardsList: FC<CardsListProps> = ({ cardsList }) => {
-  const dispatch = useDispatch();
-  const onMoreClick = (post: Post) => () => {
-    dispatch(setSelectedPostModalOpened(true));
-    dispatch(setSelectedPost(post));
-    // dispatch - ручки
-    // setSelectedPost - экшен, куда данные должны улететь
-    // null - payload, т е сами данные, которые летят в ф-ии, которые их меняют
-  };
-
-  const onImageClick = (image: string) => () => {
-    dispatch(setSelectedImageModalOpened(true));
-    dispatch(setSelectedImage(image));
-  };
-
-  const onStatusClick = (card: Post) => (status: LikeStatus) => {
-    dispatch(setLikeStatus({ card, status }));
-  };
-
-  const onFavouriteClick = (card: Post) => () => {
-    dispatch(setFavouritesPosts({ card }));
-  };
+  const {
+    onStatusClick: onClickStatus,
+    onFavouriteClick,
+    onMoreClick,
+    onImageClick,
+  } = useCardActions();
   return cardsList.length ? (
     <div className={styles.cardListcontainer}>
       <div>
@@ -49,7 +24,7 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
           {...cardsList[0]}
           onMoreClick={onMoreClick(cardsList[0])}
           onImageClick={onImageClick(cardsList[0].image)}
-          onStatusClick={onStatusClick(cardsList[0])}
+          onStatusClick={onClickStatus(cardsList[0])}
           onFavouriteClick={onFavouriteClick(cardsList[0])}
         />
         <div className={styles.medium}>
@@ -62,7 +37,7 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                   {...el}
                   onMoreClick={onMoreClick(el)}
                   onImageClick={onImageClick(el.image)}
-                  onStatusClick={onStatusClick(el)}
+                  onStatusClick={onClickStatus(el)}
                   onFavouriteClick={onFavouriteClick(el)}
                 />
               );
@@ -80,7 +55,7 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                 {...el}
                 onMoreClick={onMoreClick(el)}
                 onImageClick={onImageClick(el.image)}
-                onStatusClick={onStatusClick(el)}
+                onStatusClick={onClickStatus(el)}
                 onFavouriteClick={onFavouriteClick(el)}
               />
             );

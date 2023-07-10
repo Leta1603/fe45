@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { KeyboardEvent, useMemo, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useThemeContext } from "src/context/Theme";
 import { RoutesList } from "src/pages/Router";
@@ -42,6 +42,10 @@ const Header = () => {
 
   const handleSearchOpened = () => {
     setSearch(!isSearch);
+    if (isSearch && inputValue) {
+      navigate(`posts/${inputValue}`);
+      setInputValue("");
+    }
   };
 
   const onLoginButtonClick = () => {
@@ -50,6 +54,14 @@ const Header = () => {
 
   const onLogout = () => {
     dispatch(logOutUser());
+  };
+
+  const onKeyDown = (
+    event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (event.key === "Enter") {
+      handleSearchOpened();
+    }
   };
 
   return (
@@ -72,6 +84,7 @@ const Header = () => {
               placeholder={"Search..."}
               onChange={setInputValue}
               value={inputValue}
+              onKeyDown={onKeyDown}
             />
             <Button
               type={ButtonTypes.Primary}

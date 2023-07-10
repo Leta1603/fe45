@@ -18,6 +18,7 @@ export enum PostCardSize {
   Large = "large",
   Medium = "medium",
   Small = "small",
+  Search = "search",
 }
 
 interface PostCardProps extends Post {
