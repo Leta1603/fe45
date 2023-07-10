@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { KeyboardEvent, useMemo, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useThemeContext } from "src/context/Theme";
 import { RoutesList } from "src/pages/Router";
@@ -10,17 +10,21 @@ import classNames from "classnames";
 
 import styles from "./Header.module.scss";
 import { Theme } from "src/@types";
-import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "../assets/icons";
+import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "src/assets/icons";
 import Input from "../Input/Input";
+import { useDispatch, useSelector } from "react-redux";
+import { authSelectors, logOutUser } from "src/redux/reducers/authSlice";
 
 const Header = () => {
   const { themeValue } = useThemeContext();
 
-  const isLoggedIn = true;
+  const isLoggedIn = useSelector(authSelectors.getLoggedIn);
+  const userInfo = useSelector(authSelectors.getUserInfo);
 
   const [isOpened, setOpened] = useState(false);
   const [isSearch, setSearch] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -38,10 +42,26 @@ const Header = () => {
 
   const handleSearchOpened = () => {
     setSearch(!isSearch);
+    if (isSearch && inputValue) {
+      navigate(`posts/${inputValue}`);
+      setInputValue("");
+    }
   };
 
   const onLoginButtonClick = () => {
     navigate(RoutesList.SignIn);
+  };
+
+  const onLogout = () => {
+    dispatch(logOutUser());
+  };
+
+  const onKeyDown = (
+    event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (event.key === "Enter") {
+      handleSearchOpened();
+    }
   };
 
   return (
@@ -64,6 +84,7 @@ const Header = () => {
               placeholder={"Search..."}
               onChange={setInputValue}
               value={inputValue}
+              onKeyDown={onKeyDown}
             />
             <Button
               type={ButtonTypes.Primary}
@@ -82,12 +103,18 @@ const Header = () => {
             onClick={handleSearchOpened}
             className={styles.searchButton}
           />
-          <Button
-            type={ButtonTypes.Primary}
-            title={<UserIcon />}
-            onClick={onLoginButtonClick}
-            className={styles.userButton}
-          />
+          {isLoggedIn && userInfo ? (
+            <div className={styles.username}>
+              <Username username={userInfo.username} />
+            </div>
+          ) : (
+            <Button
+              type={ButtonTypes.Primary}
+              title={<UserIcon />}
+              onClick={onLoginButtonClick}
+              className={styles.userButton}
+            />
+          )}
         </div>
       </div>
       <div className={styles.infoContainer}>
@@ -104,9 +131,15 @@ const Header = () => {
       {isOpened && (
         <div className={styles.menuContainer}>
           <div>
-            {isLoggedIn && <Username username={"Violetta"} />}
+            {isLoggedIn && userInfo && (
+              <Username username={userInfo.username} />
+            )}
             {navLinks.map((link) => (
-              <NavLink to={link.path} key={link.path} className={styles.navLinkButton}>
+              <NavLink
+                to={link.path}
+                key={link.path}
+                className={styles.navLinkButton}
+              >
                 {link.title}
               </NavLink>
             ))}
@@ -116,7 +149,7 @@ const Header = () => {
             <Button
               type={ButtonTypes.Secondary}
               title={isLoggedIn ? "Log Out" : "Sign In"}
-              onClick={onLoginButtonClick}
+              onClick={isLoggedIn ? onLogout : onLoginButtonClick}
               className={styles.authButton}
             />
           </div>

@@ -8,3 +8,4 @@ export { MenuIcon } from "./MenuIcon";
 export { CloseIcon } from "./CloseIcon";
 export { UserIcon } from "./UserIcon";
 export { SearchIcon } from "./SearchIcon";
+export { EmptyListIcon } from "./EmptyListIcon";
