@@ -56,3 +56,26 @@ export type RefreshResponseData = {
   access: string;
 };
 
+export type GetPostsPayload = {
+  offset: number;
+  isOverwrite: boolean;
+};
+
+export type SetPostsListPayload = {
+  total: number;
+  postsList: PostsList;
+  isOverwrite: boolean;
+};
+
+export type GetPostsResponseData = {
+  count: number;
+  next: string;
+  previous: string;
+  results: PostsList;
+};
+
+export type GetSearchedPostsPayload = {
+  offset: number;
+  search: string;
+};
+export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">;

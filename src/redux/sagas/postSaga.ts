@@ -2,31 +2,27 @@ import { all, takeLatest, call, put } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { ApiResponse } from "apisauce";
 
-import { PostData } from "src/redux/@type";
+import {
+  GetPostsPayload,
+  GetPostsResponseData,
+  GetSearchedPostsPayload,
+  PostData,
+} from "src/redux/@type";
 import API from "src/utils/api";
 import {
   getMyPosts,
-  getPostList,
+  getPostsList,
   getSearchedPosts,
   getSinglePost,
   setMyPosts,
-  setPostList,
+  setPostsList,
+  setPostsListLoading,
   setSearchedPosts,
   setSinglePost,
   setSinglePostLoading,
 } from "src/redux/reducers/postSlice";
-import { Post, PostsList } from "src/@types";
+import { Post } from "src/@types";
 import callCheckingAuth from "src/redux/sagas/helpers/callCheckingAuth";
-import { setUserInfo } from "src/redux/reducers/authSlice";
-
-function* postWorker() {
-  const response: ApiResponse<PostData> = yield call(API.getPosts);
-  if (response.ok && response.data) {
-    yield put(setPostList(response.data.results));
-  } else {
-    console.error("Post List error", response.problem);
-  }
-}
 
 function* getSinglePostWorker(action: PayloadAction<string>) {
   yield put(setSinglePostLoading(true));
@@ -53,23 +49,55 @@ function* getMyPostsWorker() {
   }
 }
 
-function* getSearchedPostsWorker(action: PayloadAction<string>) {
+function* getSearchedPostsWorker(
+  action: PayloadAction<GetSearchedPostsPayload>
+) {
+  const { offset, search } = action.payload;
   const response: ApiResponse<PostData> = yield call(
     API.getPosts,
-    action.payload
+    offset,
+    search
   );
   if (response.ok && response.data) {
-    yield put(setSearchedPosts(response.data.results));
+    const { results, count } = response.data;
+    yield put(
+      setSearchedPosts({
+        postsList: results,
+        total: count,
+      })
+    );
   } else {
     console.error("Searched Posts error", response.problem);
   }
 }
 
+function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
+  yield put(setPostsListLoading(true));
+  const { offset, isOverwrite } = action.payload;
+  const response: ApiResponse<GetPostsResponseData> = yield call(
+    API.getPosts,
+    offset
+  );
+  if (response.ok && response.data) {
+    const { count, results } = response.data;
+    yield put(
+      setPostsList({
+        total: count,
+        postsList: results,
+        isOverwrite,
+      })
+    );
+  } else {
+    console.error("Get Posts List error", response.problem);
+  }
+  yield put(setPostsListLoading(false));
+}
+
 export default function* postSaga() {
   yield all([
-    takeLatest(getPostList, postWorker),
     takeLatest(getSinglePost, getSinglePostWorker),
     takeLatest(getMyPosts, getMyPostsWorker),
     takeLatest(getSearchedPosts, getSearchedPostsWorker),
+    takeLatest(getPostsList, getPostsWorker),
   ]);
 }

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
 import { LikeStatus, Post, PostsList } from "src/@types";
+import {GetPostsPayload, GetSearchedPostsPayload, SetPostsListPayload, SetSearchedPostsPayload} from "src/redux/@type";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
@@ -11,9 +12,12 @@ type InitialState = {
   favouritesPosts: PostsList;
   postList: PostsList;
   singlePost: Post | null;
-  singlePostLoading: boolean;
   myPosts: PostsList;
   searchedPosts: PostsList;
+  totalCount: number;
+  totalSearchedCount: number;
+  singlePostLoading: boolean;
+  isPostsListLoading: boolean;
 };
 
 const initialState: InitialState = {
@@ -27,6 +31,9 @@ const initialState: InitialState = {
   singlePostLoading: false,
   myPosts: [],
   searchedPosts: [],
+  isPostsListLoading: false,
+  totalCount: 0,
+  totalSearchedCount: 0,
 };
 
 const postSlice = createSlice({
@@ -75,10 +82,10 @@ const postSlice = createSlice({
         state.favouritesPosts.splice(favouriteIndex, 1);
       }
     },
-    getPostList: (_, __: PayloadAction<undefined>) => {},
-    setPostList: (state, action: PayloadAction<PostsList>) => {
-      state.postList = action.payload;
-    },
+    // getPostList: (_, __: PayloadAction<undefined>) => {},
+    // setPostList: (state, action: PayloadAction<PostsList>) => {
+    //   state.postList = action.payload;
+    // },
     getSinglePost: (_, __: PayloadAction<string>) => {},
     setSinglePostLoading: (state, action: PayloadAction<boolean>) => {
       state.singlePostLoading = action.payload;
@@ -90,9 +97,30 @@ const postSlice = createSlice({
     setMyPosts: (state, action: PayloadAction<PostsList>) => {
       state.myPosts = action.payload;
     },
-    getSearchedPosts: (_, __: PayloadAction<string>) => {},
-    setSearchedPosts: (state, action: PayloadAction<PostsList>) => {
-      state.searchedPosts = action.payload;
+    getPostsList: (_, __: PayloadAction<GetPostsPayload>) => {},
+    setPostsList: (state, action: PayloadAction<SetPostsListPayload>) => {
+      const { total, isOverwrite, postsList } = action.payload;
+      state.totalCount = total;
+      if (isOverwrite) {
+        state.postList = postsList;
+      } else {
+        state.postList.push(...postsList);
+      }
+    },
+    setPostsListLoading: (state, action: PayloadAction<boolean>) => {
+      state.isPostsListLoading = action.payload;
+    },
+    getSearchedPosts: (_, __: PayloadAction<GetSearchedPostsPayload>) => {},
+    setSearchedPosts: (
+      state,
+      action: PayloadAction<SetSearchedPostsPayload>
+    ) => {
+      const { total, postsList } = action.payload;
+      state.totalSearchedCount = total;
+      state.searchedPosts.push(...postsList);
+    },
+    clearSearchedPosts: (state) => {
+      state.searchedPosts = [];
     },
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
@@ -102,8 +130,8 @@ export const {
   setSelectedPost,
   setLikeStatus,
   setFavouritesPosts,
-  getPostList,
-  setPostList,
+  // getPostList,
+  // setPostList,
   getSinglePost,
   setSinglePost,
   setSinglePostLoading,
@@ -111,6 +139,10 @@ export const {
   setMyPosts,
   getSearchedPosts,
   setSearchedPosts,
+  getPostsList,
+  setPostsList,
+  setPostsListLoading,
+  clearSearchedPosts,
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
@@ -128,6 +160,12 @@ export const PostSelectors = {
     state.postReducer.singlePostLoading,
   getMyPosts: (state: RootState) => state.postReducer.myPosts,
   getSearchedPosts: (state: RootState) => state.postReducer.searchedPosts,
+  getPostsList: (state: RootState) => state.postReducer.postList,
+  getPostsListLoading: (state: RootState) =>
+    state.postReducer.isPostsListLoading,
+  getTotalPostsCount: (state: RootState) => state.postReducer.totalCount,
+  getTotalSearchedPosts: (state: RootState) =>
+    state.postReducer.totalSearchedCount,
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)
 

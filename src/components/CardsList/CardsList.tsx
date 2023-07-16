@@ -7,16 +7,17 @@ import { useCardActions } from "src/hooks";
 
 type CardsListProps = {
   cardsList: PostsList;
+  isListLoading: boolean;
 };
 
-const CardsList: FC<CardsListProps> = ({ cardsList }) => {
+const CardsList: FC<CardsListProps> = ({ cardsList, isListLoading }) => {
   const {
     onStatusClick: onClickStatus,
     onFavouriteClick,
     onMoreClick,
     onImageClick,
   } = useCardActions();
-  return cardsList.length ? (
+  return cardsList.length && !isListLoading ? (
     <div className={styles.cardListcontainer}>
       <div>
         <PostCard

@@ -11,18 +11,22 @@ import SelectedImageModal from "./SelectedImageModal/SelectedImageModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getMyPosts,
-  getPostList,
+  getPostsList,
   PostSelectors,
 } from "src/redux/reducers/postSlice";
 import { authSelectors } from "src/redux/reducers/authSlice";
+import { PER_PAGE } from "src/utils/constants";
+import Paginate from "src/components/Pagination";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(TabsTypes.All);
   // const [isLoggedIn, setLoggedIn] = useState(false);
   // const [cardsList, setCardsList] = useState<PostsList>([]);
   const dispatch = useDispatch();
-  const allPostsList = useSelector(PostSelectors.getPostList);
+  const allPostsList = useSelector(PostSelectors.getPostsList);
   const myPosts = useSelector(PostSelectors.getMyPosts);
+  const totalCount = useSelector(PostSelectors.getTotalPostsCount);
+  const isListLoading = useSelector(PostSelectors.getPostsListLoading);
 
   const isLoggedIn = useSelector(authSelectors.getLoggedIn);
 
@@ -39,18 +43,24 @@ const Home = () => {
     [isLoggedIn]
   );
 
+  //текущая страница, на которой мы находимся
+  const [currentPage, setCurrentPage] = useState(1);
+
+  //сколько итого у нас страниц
+  const pagesCount = useMemo(
+    () => Math.ceil(totalCount / PER_PAGE),
+    [totalCount]
+  );
+
   useEffect(() => {
     if (activeTab === TabsTypes.MyPosts) {
       dispatch(getMyPosts());
     } else {
-      dispatch(getPostList());
+      // сколько надо пропустить постов (сколько мы уже посмотрели)
+      const offset = (currentPage - 1) * PER_PAGE;
+      dispatch(getPostsList({ offset, isOverwrite: true }));
     }
-  }, [activeTab]);
-
-  useEffect(() => {
-    // setCardsList(MOCK_ARRAY);
-    dispatch(getPostList());
-  }, []);
+  }, [currentPage, activeTab]);
 
   const onTabClick = (tab: TabsTypes) => () => {
     setActiveTab(tab);
@@ -67,6 +77,10 @@ const Home = () => {
     }
   };
 
+  const onPageChange = ({ selected }: { selected: number }) => {
+    setCurrentPage(selected + 1);
+  };
+
   return (
     <div>
       <Title title={"Blog"} className={styles.pageTitle} />
@@ -75,7 +89,12 @@ const Home = () => {
         activeTab={activeTab}
         onTabClick={onTabClick}
       />
-      <CardsList cardsList={tabsContextSwitcher()} />
+      <CardsList cardsList={tabsContextSwitcher()} isListLoading={isListLoading}/>
+      <Paginate
+        pagesCount={pagesCount}
+        onPageChange={onPageChange}
+        currentPage={currentPage}
+      />
       <SelectedPostModal />
       <SelectedImageModal />
     </div>

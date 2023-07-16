@@ -5,6 +5,7 @@ import {
   SignInUserData,
   SignUpUserData,
 } from "src/redux/@type";
+import { PER_PAGE } from "src/utils/constants";
 
 const API = create({
   baseURL: "https://studapi.teachmeskills.by",
@@ -14,8 +15,8 @@ const signUpUser = (data: SignUpUserData) => {
   return API.post("/auth/users/", data);
 };
 
-const getPosts = (search?: string) => {
-  return API.get("/blog/posts", { search, limit: 12 });
+const getPosts = (offset: number, search?: string) => {
+  return API.get("/blog/posts", { limit: PER_PAGE, offset, search });
 };
 
 const getSinglePost = (id: string) => {
