@@ -73,10 +73,12 @@ function* getSearchedPostsWorker(
 
 function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
   yield put(setPostsListLoading(true));
-  const { offset, isOverwrite } = action.payload;
+  const { offset, isOverwrite, ordering } = action.payload;
   const response: ApiResponse<GetPostsResponseData> = yield call(
     API.getPosts,
-    offset
+    offset,
+    "",
+    ordering
   );
   if (response.ok && response.data) {
     const { count, results } = response.data;
@@ -95,9 +97,9 @@ function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
 
 export default function* postSaga() {
   yield all([
+    takeLatest(getPostsList, getPostsWorker),
     takeLatest(getSinglePost, getSinglePostWorker),
     takeLatest(getMyPosts, getMyPostsWorker),
     takeLatest(getSearchedPosts, getSearchedPostsWorker),
-    takeLatest(getPostsList, getPostsWorker),
   ]);
 }

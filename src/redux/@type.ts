@@ -59,6 +59,7 @@ export type RefreshResponseData = {
 export type GetPostsPayload = {
   offset: number;
   isOverwrite: boolean;
+  ordering?: string;
 };
 
 export type SetPostsListPayload = {

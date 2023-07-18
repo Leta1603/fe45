@@ -40,3 +40,8 @@ export enum FavouriteStatus {
   Favourite = "favourite",
   NotFavourite = "notFavourite",
 }
+
+export enum Order {
+  Date = "date",
+  Title = "title",
+}
