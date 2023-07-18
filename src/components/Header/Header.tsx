@@ -14,7 +14,7 @@ import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "src/assets/icons";
 import Input from "../Input/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors, logOutUser } from "src/redux/reducers/authSlice";
-import {clearSearchedPosts} from "src/redux/reducers/postSlice";
+import { clearSearchedPosts } from "src/redux/reducers/postSlice";
 
 const Header = () => {
   const { themeValue } = useThemeContext();
@@ -131,7 +131,11 @@ const Header = () => {
         </div>
       </div>
       {isOpened && (
-        <div className={styles.menuContainer}>
+        <div
+          className={classNames(styles.menuContainer, {
+            [styles.darkMenuContainer]: themeValue === Theme.Dark,
+          })}
+        >
           <div>
             {isLoggedIn && userInfo && (
               <Username username={userInfo.username} />
@@ -140,7 +144,9 @@ const Header = () => {
               <NavLink
                 to={link.path}
                 key={link.path}
-                className={styles.navLinkButton}
+                className={classNames(styles.navLinkButton, {
+                  [styles.darkNavLinkButton]: themeValue === Theme.Dark,
+                })}
               >
                 {link.title}
               </NavLink>
@@ -152,7 +158,10 @@ const Header = () => {
               type={ButtonTypes.Secondary}
               title={isLoggedIn ? "Log Out" : "Sign In"}
               onClick={isLoggedIn ? onLogout : onLoginButtonClick}
-              className={styles.authButton}
+              // className={styles.authButton}
+              className={classNames(styles.authButton, {
+                [styles.darkAuthButton]: themeValue === Theme.Dark,
+              })}
             />
           </div>
         </div>

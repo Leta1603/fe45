@@ -13,6 +13,9 @@ import { PER_PAGE } from "src/utils/constants";
 
 import styles from "./Search.module.scss";
 import Loader from "src/components/Loader";
+import {useThemeContext} from "src/context/Theme";
+import classNames from "classnames";
+import {Theme} from "src/@types";
 const Search = () => {
   const { search } = useParams();
   const navigate = useNavigate();
@@ -21,6 +24,8 @@ const Search = () => {
   const totalPosts = useSelector(PostSelectors.getTotalSearchedPosts);
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const { themeValue } = useThemeContext();
 
   const { onStatusClick, onFavouriteClick, onMoreClick, onImageClick } =
     useCardActions();
@@ -31,7 +36,7 @@ const Search = () => {
       const offset = (currentPage - 1) * PER_PAGE;
       dispatch(getSearchedPosts({ search, offset }));
     }
-  }, [dispatch, navigate, search]);
+  }, [dispatch, navigate, search, currentPage]);
 
   const onNextReached = () => {
     setCurrentPage(currentPage + 1);
@@ -39,7 +44,10 @@ const Search = () => {
   return (
     <div>
       <Title title={`Search results: "${search}"`} />
-      <div className={styles.container} id="scrollableDiv">
+      <div className={classNames(styles.container, {
+        [styles.darkContainer]: themeValue === Theme.Dark,
+      })} id="scrollableDiv">
+      {/*<div className={styles.container} id="scrollableDiv">*/}
         {searchedPosts.length ? (
           <InfiniteScroll
             next={onNextReached}
@@ -48,6 +56,7 @@ const Search = () => {
             loader={<Loader />}
             dataLength={searchedPosts.length}
             scrollableTarget="scrollableDiv"
+            className={styles.postCards}
           >
             {searchedPosts.map((post) => {
               return (

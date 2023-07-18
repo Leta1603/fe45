@@ -24,3 +24,15 @@
     fill: $secondary;
   }
 }
+
+.activeButtonDark {
+  svg > path {
+    fill: $extra-light;
+  }
+}
+
+.notActiveButton {
+  svg > path {
+    fill: $gray;
+  }
+}
