@@ -18,6 +18,7 @@ export enum RoutesList {
   SignIn = "/sign-in",
   RegistrationConfirmation = "/activate/:uid/:token",
   SelectedPost = `/post/:id`,
+  EditPost = "/posts/:id/edit",
   Search = "/posts/:search",
   AddPost = "/blog/posts/",
   Default = "*",
@@ -71,9 +72,19 @@ const Router = () => {
             path={RoutesList.Default}
             element={<Navigate to={RoutesList.Home} />}
           />
-          <Route path={RoutesList.Search}
-          element={<Search/>}/>
-          <Route path={RoutesList.AddPost} element={isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />} />
+          <Route path={RoutesList.Search} element={<Search />} />
+          <Route
+            path={RoutesList.AddPost}
+            element={
+              isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
+            }
+          />
+          <Route
+            path={RoutesList.EditPost}
+            element={
+              isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

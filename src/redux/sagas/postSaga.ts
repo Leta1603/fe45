@@ -4,14 +4,20 @@ import { ApiResponse } from "apisauce";
 
 import {
   AddPostDataPayload,
+  DeletePostPayload,
+  EditPostPayload,
   GetPostsPayload,
   GetPostsResponseData,
   GetSearchedPostsPayload,
-  PostData, SignUpResponseData, SignUpUserPayload,
+  PostData,
+  SignUpResponseData,
+  SignUpUserPayload,
 } from "src/redux/@type";
 import API from "src/utils/api";
 import {
   addNewPost,
+  deletePost,
+  editPost,
   getMyPosts,
   getPostsList,
   getSearchedPosts,
@@ -101,13 +107,40 @@ function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
 function* addPostWorker(action: PayloadAction<AddPostDataPayload>) {
   const { data, callback } = action.payload;
   const response: ApiResponse<undefined> = yield callCheckingAuth(
-      API.addPost,
-      data
+    API.addPost,
+    data
   );
   if (response.ok && response.data) {
     callback();
   } else {
     console.error("Add Post error", response.problem);
+  }
+}
+
+function* deletePostWorker(action: PayloadAction<DeletePostPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield callCheckingAuth(
+    API.deletePost,
+    data
+  );
+  if (response.ok) {
+    callback();
+  } else {
+    console.error("Delete Post error", response.problem);
+  }
+}
+
+function* editPostWorker(action: PayloadAction<EditPostPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield callCheckingAuth(
+    API.editPost,
+    data.postId,
+    data.newData
+  );
+  if (response.ok) {
+    callback();
+  } else {
+    console.error("Edit Post error", response.problem);
   }
 }
 
@@ -118,5 +151,7 @@ export default function* postSaga() {
     takeLatest(getMyPosts, getMyPostsWorker),
     takeLatest(getSearchedPosts, getSearchedPostsWorker),
     takeLatest(addNewPost, addPostWorker),
+    takeLatest(deletePost, deletePostWorker),
+    takeLatest(editPost, editPostWorker),
   ]);
 }

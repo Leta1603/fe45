@@ -4,6 +4,8 @@ import { RootState } from "src/redux/store";
 import { LikeStatus, Post, PostsList } from "src/@types";
 import {
   AddPostDataPayload,
+  DeletePostPayload,
+  EditPostPayload,
   GetPostsPayload,
   GetSearchedPostsPayload,
   SetPostsListPayload,
@@ -125,6 +127,8 @@ const postSlice = createSlice({
       state.searchedPosts = [];
     },
     addNewPost: (_, __: PayloadAction<AddPostDataPayload>) => {},
+    deletePost: (_, __: PayloadAction<DeletePostPayload>) => {},
+    editPost: (_, __: PayloadAction<EditPostPayload>) => {},
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
 
@@ -144,7 +148,9 @@ export const {
   setPostsList,
   setPostsListLoading,
   clearSearchedPosts,
-  addNewPost
+  addNewPost,
+  deletePost,
+  editPost,
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит

@@ -7,6 +7,7 @@ export interface Post {
   date: string;
   lesson_num: number;
   title: string;
+  description: string;
   author?: number;
 }
 export type PostsList = Post[];

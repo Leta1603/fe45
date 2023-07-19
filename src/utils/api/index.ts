@@ -2,6 +2,7 @@ import { create } from "apisauce";
 
 import {
   ActivateUserData,
+  PostData,
   SignInUserData,
   SignUpUserData,
 } from "src/redux/@type";
@@ -70,6 +71,25 @@ const addPost = (token: string, data: any) => {
     },
   });
 };
+const deletePost = (token: string, id: number) => {
+  return API.delete(
+    `/blog/posts/${id}/`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+const editPost = (token: string, id: number, data: any) => {
+  return API.put(`/blog/posts/${id}/`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
 export default {
   signUpUser,
@@ -82,4 +102,6 @@ export default {
   getUserInfo,
   getMyPosts,
   addPost,
+  deletePost,
+  editPost,
 };

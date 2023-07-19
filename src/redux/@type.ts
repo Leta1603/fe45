@@ -83,3 +83,12 @@ export type GetSearchedPostsPayload = {
 export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">;
 
 export type AddPostDataPayload = PayloadWithDataAndCallback<any>;
+
+export type DeletePostPayload = PayloadWithDataAndCallback<number>;
+
+export type EditPostData = {
+  postId: number;
+  newData: any;
+};
+
+export type EditPostPayload = PayloadWithDataAndCallback<EditPostData>;

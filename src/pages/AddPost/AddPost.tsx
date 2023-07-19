@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 
 import Button, { ButtonTypes } from "src/components/Button/Button";
@@ -6,19 +6,51 @@ import Input from "src/components/Input/Input";
 import Title from "src/components/Title/Title";
 import styles from "./AddPost.module.scss";
 import classNames from "classnames";
-import { useDispatch } from "react-redux";
-import { addNewPost } from "src/redux/reducers/postSlice";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addNewPost,
+  deletePost,
+  editPost,
+  getSinglePost,
+  PostSelectors,
+} from "src/redux/reducers/postSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import { RoutesList } from "../Router";
+import AuthSlice, { authSelectors } from "src/redux/reducers/authSlice";
 const AddPost = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { id } = useParams();
+  const singlePost = useSelector(PostSelectors.getSinglePost);
+  const userInfo = useSelector(authSelectors.getUserInfo);
 
   const [title, setTitle] = useState("");
   const [lessonNumber, setLessonNumber] = useState("");
   const [description, setDescription] = useState("");
   const [text, setText] = useState("");
   const [images, setImages] = useState<ImageListType>([]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getSinglePost(id));
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (singlePost && userInfo) {
+      if (singlePost.author === userInfo.id) {
+        setTitle(singlePost.title);
+        setLessonNumber(singlePost.lesson_num.toString());
+        setDescription(singlePost.description);
+        setText(singlePost?.text || "");
+        setImages([{ imageData: singlePost.image }]);
+      } else {
+        navigate(RoutesList.Home);
+      }
+    }
+  }, [singlePost?.id]);
+
   const onChange = (imageList: ImageListType, addUpdateIndex?: number[]) => {
     setImages(imageList);
   };
@@ -34,12 +66,25 @@ const AddPost = () => {
     formData.append("description", description);
     formData.append("lesson_num", lessonNumber);
     formData.append("image", images[0].file as Blob);
-    dispatch(
-      addNewPost({
-        data: formData,
-        callback: onNavigateToHome,
-      })
-    );
+    if (singlePost?.author) {
+      formData.append("author", singlePost.author.toString());
+    }
+    const action = singlePost
+      ? editPost({
+          data: { postId: singlePost.id, newData: formData },
+          callback: onNavigateToHome,
+        })
+      : addNewPost({
+          data: formData,
+          callback: onNavigateToHome,
+        });
+    dispatch(action);
+  };
+
+  const onDeletePost = () => {
+    if (singlePost) {
+      dispatch(deletePost({ data: singlePost.id, callback: onNavigateToHome }));
+    }
   };
 
   return (
@@ -140,7 +185,8 @@ const AddPost = () => {
         <Button
           type={ButtonTypes.Error}
           title={"Delete post"}
-          onClick={() => {}}
+          onClick={onDeletePost}
+          disabled={!singlePost?.id}
         />
         <div className={styles.endRightBtn}>
           <Button
@@ -150,7 +196,7 @@ const AddPost = () => {
           />
           <Button
             type={ButtonTypes.Primary}
-            title={"Add post"}
+            title={singlePost?.id ? "Edit post" : "Add post"}
             onClick={onSubmit}
           />
         </div>
