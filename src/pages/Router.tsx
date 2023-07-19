@@ -10,6 +10,7 @@ import SelectedPost from "src/pages/SelectedPost";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors, getUserInfo } from "src/redux/reducers/authSlice";
 import Search from "src/pages/Search";
+import AddPost from "src/pages/AddPost";
 
 export enum RoutesList {
   Home = "/",
@@ -18,6 +19,7 @@ export enum RoutesList {
   RegistrationConfirmation = "/activate/:uid/:token",
   SelectedPost = `/post/:id`,
   Search = "/posts/:search",
+  AddPost = "/blog/posts/",
   Default = "*",
 }
 
@@ -71,6 +73,7 @@ const Router = () => {
           />
           <Route path={RoutesList.Search}
           element={<Search/>}/>
+          <Route path={RoutesList.AddPost} element={isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />} />
         </Route>
       </Routes>
     </BrowserRouter>

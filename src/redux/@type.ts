@@ -79,4 +79,7 @@ export type GetSearchedPostsPayload = {
   offset: number;
   search: string;
 };
+
 export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">;
+
+export type AddPostDataPayload = PayloadWithDataAndCallback<any>;

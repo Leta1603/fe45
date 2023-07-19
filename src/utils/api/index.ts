@@ -19,10 +19,6 @@ const getPosts = (offset: number, search?: string, ordering?: string) => {
   return API.get("/blog/posts", { limit: PER_PAGE, offset, search, ordering });
 };
 
-// const getPosts = (offset: number, ordering?: string) => {
-//   return API.get("/blog/posts", { limit: PER_PAGE, offset, ordering });
-// };
-
 const getSinglePost = (id: string) => {
   return API.get(`/blog/posts/${id}/`);
 };
@@ -67,6 +63,14 @@ const getMyPosts = (token: string) => {
   );
 };
 
+const addPost = (token: string, data: any) => {
+  return API.post("/blog/posts/", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export default {
   signUpUser,
   getPosts,
@@ -77,4 +81,5 @@ export default {
   refreshToken,
   getUserInfo,
   getMyPosts,
+  addPost,
 };

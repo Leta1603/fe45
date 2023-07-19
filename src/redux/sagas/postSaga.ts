@@ -3,13 +3,15 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { ApiResponse } from "apisauce";
 
 import {
+  AddPostDataPayload,
   GetPostsPayload,
   GetPostsResponseData,
   GetSearchedPostsPayload,
-  PostData,
+  PostData, SignUpResponseData, SignUpUserPayload,
 } from "src/redux/@type";
 import API from "src/utils/api";
 import {
+  addNewPost,
   getMyPosts,
   getPostsList,
   getSearchedPosts,
@@ -23,6 +25,7 @@ import {
 } from "src/redux/reducers/postSlice";
 import { Post } from "src/@types";
 import callCheckingAuth from "src/redux/sagas/helpers/callCheckingAuth";
+import addPost from "src/pages/AddPost";
 
 function* getSinglePostWorker(action: PayloadAction<string>) {
   yield put(setSinglePostLoading(true));
@@ -95,11 +98,25 @@ function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
   yield put(setPostsListLoading(false));
 }
 
+function* addPostWorker(action: PayloadAction<AddPostDataPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield callCheckingAuth(
+      API.addPost,
+      data
+  );
+  if (response.ok && response.data) {
+    callback();
+  } else {
+    console.error("Add Post error", response.problem);
+  }
+}
+
 export default function* postSaga() {
   yield all([
     takeLatest(getPostsList, getPostsWorker),
     takeLatest(getSinglePost, getSinglePostWorker),
     takeLatest(getMyPosts, getMyPostsWorker),
     takeLatest(getSearchedPosts, getSearchedPostsWorker),
+    takeLatest(addNewPost, addPostWorker),
   ]);
 }

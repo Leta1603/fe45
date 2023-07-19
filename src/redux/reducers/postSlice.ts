@@ -2,7 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
 import { LikeStatus, Post, PostsList } from "src/@types";
-import {GetPostsPayload, GetSearchedPostsPayload, SetPostsListPayload, SetSearchedPostsPayload} from "src/redux/@type";
+import {
+  AddPostDataPayload,
+  GetPostsPayload,
+  GetSearchedPostsPayload,
+  SetPostsListPayload,
+  SetSearchedPostsPayload,
+} from "src/redux/@type";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
@@ -82,10 +88,6 @@ const postSlice = createSlice({
         state.favouritesPosts.splice(favouriteIndex, 1);
       }
     },
-    // getPostList: (_, __: PayloadAction<undefined>) => {},
-    // setPostList: (state, action: PayloadAction<PostsList>) => {
-    //   state.postList = action.payload;
-    // },
     getSinglePost: (_, __: PayloadAction<string>) => {},
     setSinglePostLoading: (state, action: PayloadAction<boolean>) => {
       state.singlePostLoading = action.payload;
@@ -122,6 +124,7 @@ const postSlice = createSlice({
     clearSearchedPosts: (state) => {
       state.searchedPosts = [];
     },
+    addNewPost: (_, __: PayloadAction<AddPostDataPayload>) => {},
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
 
@@ -130,8 +133,6 @@ export const {
   setSelectedPost,
   setLikeStatus,
   setFavouritesPosts,
-  // getPostList,
-  // setPostList,
   getSinglePost,
   setSinglePost,
   setSinglePostLoading,
@@ -143,6 +144,7 @@ export const {
   setPostsList,
   setPostsListLoading,
   clearSearchedPosts,
+  addNewPost
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
@@ -154,7 +156,6 @@ export const PostSelectors = {
   getLikedPosts: (state: RootState) => state.postReducer.likedPosts,
   getDislikedPosts: (state: RootState) => state.postReducer.dislikedPosts,
   getFavouritePosts: (state: RootState) => state.postReducer.favouritesPosts,
-  getPostList: (state: RootState) => state.postReducer.postList,
   getSinglePost: (state: RootState) => state.postReducer.singlePost,
   getSinglePostLoading: (state: RootState) =>
     state.postReducer.singlePostLoading,
