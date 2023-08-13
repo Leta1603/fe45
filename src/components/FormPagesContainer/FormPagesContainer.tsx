@@ -51,6 +51,7 @@ const FormPagesContainer: FC<FormPagesContainerProps> = ({
           title={btnTitle}
           onClick={onSubmit}
           className={styles.button}
+          disabled={isSubmitDisabled}
         />
         <div>{additionalInfo}</div>
       </div>
