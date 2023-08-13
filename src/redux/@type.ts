@@ -62,7 +62,7 @@ export type GetPostsPayload = {
   ordering?: string;
 };
 
-export type SetPostsListPayload = {
+export type   SetPostsListPayload = {
   total: number;
   postsList: PostsList;
   isOverwrite: boolean;
@@ -92,3 +92,14 @@ export type EditPostData = {
 };
 
 export type EditPostPayload = PayloadWithDataAndCallback<EditPostData>;
+
+export type ResetPasswordPayload = PayloadWithDataAndCallback<string>;
+
+export type ResetPasswordConfirmationData = {
+  uid: string;
+  token: string;
+  new_password: string;
+};
+
+export type ResetPasswordConfirmationPayload =
+  PayloadWithDataAndCallback<ResetPasswordConfirmationData>;

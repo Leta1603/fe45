@@ -25,6 +25,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const allPostsList = useSelector(PostSelectors.getPostsList);
   const myPosts = useSelector(PostSelectors.getMyPosts);
+  const favouritePosts = useSelector(PostSelectors.getFavouritePosts);
   const totalCount = useSelector(PostSelectors.getTotalPostsCount);
   const isListLoading = useSelector(PostSelectors.getPostsListLoading);
 
@@ -33,7 +34,7 @@ const Home = () => {
   const tabsList = useMemo(
     () => [
       { key: TabsTypes.All, title: "All Posts", disabled: false },
-      { key: TabsTypes.Popular, title: "Popular Posts", disabled: false },
+      { key: TabsTypes.Favourite, title: "Favourite Posts", disabled: false },
       {
         key: TabsTypes.MyPosts,
         title: "My Posts",
@@ -72,6 +73,8 @@ const Home = () => {
   const tabsContextSwitcher = () => {
     if (activeTab === TabsTypes.MyPosts) {
       return myPosts;
+    } else if (activeTab === TabsTypes.Favourite) {
+      return favouritePosts;
     } else {
       return allPostsList;
     }
@@ -101,13 +104,21 @@ const Home = () => {
       <div className={styles.containerButton}>
         <Button
           className={styles.buttonSort}
-          type={ButtonTypes.Primary}
+          type={
+            ordering === Order.Date
+              ? ButtonTypes.Primary
+              : ButtonTypes.Secondary
+          }
           title={"Date"}
           onClick={onSortBtnClick(Order.Date)}
         />
         <Button
           className={styles.buttonSort}
-          type={ButtonTypes.Primary}
+          type={
+            ordering === Order.Title
+              ? ButtonTypes.Primary
+              : ButtonTypes.Secondary
+          }
           title={"Title"}
           onClick={onSortBtnClick(Order.Title)}
         />

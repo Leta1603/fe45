@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { authSelectors, getUserInfo } from "src/redux/reducers/authSlice";
 import Search from "src/pages/Search";
 import AddPost from "src/pages/AddPost";
+import ResetPassword from "src/pages/ResetPassword/ResetPassword";
+import ResetPasswordConfirmation from "src/pages/ResetPasswordConfirmation";
 
 export enum RoutesList {
   Home = "/",
@@ -21,6 +23,8 @@ export enum RoutesList {
   EditPost = "/posts/:id/edit",
   Search = "/posts/:search",
   AddPost = "/blog/posts/",
+  ResetPassword = "/password/reset",
+  ResetPasswordConfirm = "/password/reset/confirm/:uid/:token",
   Default = "*",
 }
 
@@ -84,6 +88,12 @@ const Router = () => {
             element={
               isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
             }
+          />
+          <Route path={RoutesList.ResetPassword} element={<ResetPassword />} />
+
+          <Route
+            path={RoutesList.ResetPasswordConfirm}
+            element={<ResetPasswordConfirmation />}
           />
         </Route>
       </Routes>

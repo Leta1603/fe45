@@ -20,6 +20,7 @@ const Search = () => {
   const { search } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const searchedPosts = useSelector(PostSelectors.getSearchedPosts);
   const totalPosts = useSelector(PostSelectors.getTotalSearchedPosts);
 

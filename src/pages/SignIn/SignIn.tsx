@@ -33,6 +33,10 @@ const SignIn = () => {
     );
   };
 
+  const onReset = () => {
+    navigate(RoutesList.ResetPassword);
+  };
+
   return (
     <FormPagesContainer
       title={"Sign In"}
@@ -64,6 +68,7 @@ const SignIn = () => {
           className={classNames(styles.forgotPassword, {
             [styles.darkForgotPassword]: themeValue === Theme.Dark,
           })}
+          onClick={onReset}
         >
           Forgot password?
         </div>

@@ -2,7 +2,7 @@ import { create } from "apisauce";
 
 import {
   ActivateUserData,
-  PostData,
+  ResetPasswordConfirmationData,
   SignInUserData,
   SignUpUserData,
 } from "src/redux/@type";
@@ -91,6 +91,14 @@ const editPost = (token: string, id: number, data: any) => {
   });
 };
 
+const resetPassword = (email: string) => {
+  return API.post("/auth/users/reset_password/", { email });
+};
+
+const resetPasswordConfirmation = (data: ResetPasswordConfirmationData) => {
+  return API.post("/auth/users/reset_password_confirm/", data);
+};
+
 export default {
   signUpUser,
   getPosts,
@@ -104,4 +112,6 @@ export default {
   addPost,
   deletePost,
   editPost,
+  resetPassword,
+  resetPasswordConfirmation,
 };
