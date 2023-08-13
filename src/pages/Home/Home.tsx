@@ -65,9 +65,6 @@ const Home = () => {
 
   const onTabClick = (tab: TabsTypes) => () => {
     setActiveTab(tab);
-    // if (tab === TabsTypes.Popular) {
-    //   setLoggedIn(true);
-    // }
   };
 
   const tabsContextSwitcher = () => {

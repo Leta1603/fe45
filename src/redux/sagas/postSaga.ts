@@ -1,4 +1,4 @@
-import { all, takeLatest, call, put } from "redux-saga/effects";
+import { all, takeLatest, call, put, delay } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { ApiResponse } from "apisauce";
 
@@ -10,8 +10,6 @@ import {
   GetPostsResponseData,
   GetSearchedPostsPayload,
   PostData,
-  SignUpResponseData,
-  SignUpUserPayload,
 } from "src/redux/@type";
 import API from "src/utils/api";
 import {
@@ -31,7 +29,7 @@ import {
 } from "src/redux/reducers/postSlice";
 import { Post } from "src/@types";
 import callCheckingAuth from "src/redux/sagas/helpers/callCheckingAuth";
-import addPost from "src/pages/AddPost";
+import { toast } from "react-toastify";
 
 function* getSinglePostWorker(action: PayloadAction<string>) {
   yield put(setSinglePostLoading(true));
@@ -41,6 +39,7 @@ function* getSinglePostWorker(action: PayloadAction<string>) {
   );
   if (response.ok && response.data) {
     yield put(setSinglePost(response.data));
+    toast.success("Post successfully loaded", { delay: 200 });
   } else {
     console.error("Single Post error", response.problem);
   }
@@ -61,7 +60,8 @@ function* getMyPostsWorker() {
 function* getSearchedPostsWorker(
   action: PayloadAction<GetSearchedPostsPayload>
 ) {
-  const { offset, search } = action.payload;
+  yield delay(500);
+  const { offset, search, isOverwrite } = action.payload;
   const response: ApiResponse<PostData> = yield call(
     API.getPosts,
     offset,
@@ -73,6 +73,7 @@ function* getSearchedPostsWorker(
       setSearchedPosts({
         postsList: results,
         total: count,
+        isOverwrite,
       })
     );
   } else {

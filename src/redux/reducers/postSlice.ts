@@ -119,9 +119,13 @@ const postSlice = createSlice({
       state,
       action: PayloadAction<SetSearchedPostsPayload>
     ) => {
-      const { total, postsList } = action.payload;
+      const { total, postsList, isOverwrite } = action.payload;
       state.totalSearchedCount = total;
-      state.searchedPosts.push(...postsList);
+      if (isOverwrite) {
+        state.searchedPosts = postsList;
+      } else {
+        state.searchedPosts.push(...postsList);
+      }
     },
     clearSearchedPosts: (state) => {
       state.searchedPosts = [];

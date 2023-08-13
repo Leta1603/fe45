@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./Home";
 import SignUp from "./SignUp";
@@ -13,6 +14,7 @@ import Search from "src/pages/Search";
 import AddPost from "src/pages/AddPost";
 import ResetPassword from "src/pages/ResetPassword/ResetPassword";
 import ResetPasswordConfirmation from "src/pages/ResetPasswordConfirmation";
+import {ToastContainer} from "react-toastify";
 
 export enum RoutesList {
   Home = "/",
@@ -40,64 +42,74 @@ const Router = () => {
   }, [isLoggedIn]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={RoutesList.Home} element={<Header />}>
-          <Route path={RoutesList.Home} element={<Home />} />
-          <Route
-            path={RoutesList.SignUp}
-            element={
-              !isLoggedIn ? <SignUp /> : <Navigate to={RoutesList.Home} />
-            }
-          />
-          <Route
-            path={RoutesList.SignIn}
-            element={
-              !isLoggedIn ? <SignIn /> : <Navigate to={RoutesList.Home} />
-            }
-          />
-          <Route
-            path={RoutesList.SelectedPost}
-            element={
-              isLoggedIn ? <SelectedPost /> : <Navigate to={RoutesList.Home} />
-            }
-          />
-          <Route
-            path={RoutesList.RegistrationConfirmation}
-            element={
-              !isLoggedIn ? (
-                <RegistrationConfirmation />
-              ) : (
-                <Navigate to={RoutesList.Home} />
-              )
-            }
-          />
-          <Route
-            path={RoutesList.Default}
-            element={<Navigate to={RoutesList.Home} />}
-          />
-          <Route path={RoutesList.Search} element={<Search />} />
-          <Route
-            path={RoutesList.AddPost}
-            element={
-              isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
-            }
-          />
-          <Route
-            path={RoutesList.EditPost}
-            element={
-              isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
-            }
-          />
-          <Route path={RoutesList.ResetPassword} element={<ResetPassword />} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path={RoutesList.Home} element={<Header />}>
+            <Route path={RoutesList.Home} element={<Home />} />
+            <Route
+              path={RoutesList.SignUp}
+              element={
+                !isLoggedIn ? <SignUp /> : <Navigate to={RoutesList.Home} />
+              }
+            />
+            <Route
+              path={RoutesList.SignIn}
+              element={
+                !isLoggedIn ? <SignIn /> : <Navigate to={RoutesList.Home} />
+              }
+            />
+            <Route
+              path={RoutesList.SelectedPost}
+              element={
+                isLoggedIn ? (
+                  <SelectedPost />
+                ) : (
+                  <Navigate to={RoutesList.Home} />
+                )
+              }
+            />
+            <Route
+              path={RoutesList.RegistrationConfirmation}
+              element={
+                !isLoggedIn ? (
+                  <RegistrationConfirmation />
+                ) : (
+                  <Navigate to={RoutesList.Home} />
+                )
+              }
+            />
+            <Route
+              path={RoutesList.Default}
+              element={<Navigate to={RoutesList.Home} />}
+            />
+            <Route path={RoutesList.Search} element={<Search />} />
+            <Route
+              path={RoutesList.AddPost}
+              element={
+                isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
+              }
+            />
+            <Route
+              path={RoutesList.EditPost}
+              element={
+                isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
+              }
+            />
+            <Route
+              path={RoutesList.ResetPassword}
+              element={<ResetPassword />}
+            />
 
-          <Route
-            path={RoutesList.ResetPasswordConfirm}
-            element={<ResetPasswordConfirmation />}
-          />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+            <Route
+              path={RoutesList.ResetPasswordConfirm}
+              element={<ResetPasswordConfirmation />}
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer />
+    </>
   );
 };
 

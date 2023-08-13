@@ -62,7 +62,7 @@ export type GetPostsPayload = {
   ordering?: string;
 };
 
-export type   SetPostsListPayload = {
+export type SetPostsListPayload = {
   total: number;
   postsList: PostsList;
   isOverwrite: boolean;
@@ -78,9 +78,10 @@ export type GetPostsResponseData = {
 export type GetSearchedPostsPayload = {
   offset: number;
   search: string;
+  isOverwrite: boolean;
 };
 
-export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">;
+export type SetSearchedPostsPayload = SetPostsListPayload;
 
 export type AddPostDataPayload = PayloadWithDataAndCallback<any>;
 
