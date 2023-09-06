@@ -12,17 +12,16 @@ export enum PostCardSize {
 }
 
 type PostCardProps = {
-  id: number;
   image: string;
   text?: string;
   date: string;
-  lesson_num: number;
   title: string;
-  author?: number;
   size: PostCardSize;
+  onMoreClick?: () => void;
+  onImageClick?: () => void;
 };
 
-const PostCard: FC<PostCardProps> = ({ id, image, title, text, date, lesson_num, author, size }) => {
+const PostCard: FC<PostCardProps> = ({ image, title, text, date, size, onMoreClick, onImageClick }) => {
   const postCardStyle = styles[size];
   const { themeValue } = useThemeContext();
   return (
@@ -35,7 +34,7 @@ const PostCard: FC<PostCardProps> = ({ id, image, title, text, date, lesson_num,
           </div>
           {size === PostCardSize.Large && <p className={styles.text}>{text}</p>}
         </div>
-        <div className={styles.cardImg}>
+        <div className={styles.cardImg} onClick={onImageClick}>
           <img src={image} alt="imagePost" />
         </div>
       </div>
@@ -54,9 +53,14 @@ const PostCard: FC<PostCardProps> = ({ id, image, title, text, date, lesson_num,
           <div className={classNames(styles.icon, { [styles.darkIcon]: themeValue === Theme.Dark })}>
             <BookmarkIcon />
           </div>
-          <div className={classNames(styles.icon, { [styles.darkIcon]: themeValue === Theme.Dark })}>
-            <MoreMenuIcon />
-          </div>
+          {onMoreClick && (
+            <div
+              onClick={onMoreClick}
+              className={classNames(styles.icon, { [styles.darkIcon]: themeValue === Theme.Dark })}
+            >
+              <MoreMenuIcon />
+            </div>
+          )}
         </div>
       </div>
     </div>
