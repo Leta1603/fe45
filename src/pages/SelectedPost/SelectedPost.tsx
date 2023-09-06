@@ -5,21 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Title from "../../components/Title/Title";
 import styles from "./SelectedPost.module.scss";
-import {
-  BookmarkIcon,
-  DislikeIcon,
-  LikeIcon,
-} from "src/components/assets/icons";
+import { BookmarkIcon, DislikeIcon, LikeIcon } from "src/assets/icons";
 import { useThemeContext } from "src/context/Theme";
 import { Theme } from "src/@types";
 import { getSinglePost, PostSelectors } from "src/redux/reducers/postSlice";
 import { RoutesList } from "src/pages/Router";
+import Loader from "src/components/Loader";
 
 const SelectedPost = () => {
   const { themeValue } = useThemeContext();
   const { id } = useParams();
   const dispatch = useDispatch();
   const singlePost = useSelector(PostSelectors.getSinglePost);
+  const isSinglePostLoading = useSelector(PostSelectors.getSinglePostLoading);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const SelectedPost = () => {
     navigate(RoutesList.Home);
   };
 
-  return singlePost ? (
+  return singlePost && !isSinglePostLoading ? (
     <div
       className={classNames(styles.container, {
         [styles.darkContainer]: themeValue === Theme.Dark,
@@ -43,7 +41,9 @@ const SelectedPost = () => {
           [styles.darkBreadcrumbs]: themeValue === Theme.Dark,
         })}
       >
-        <span onClick={onHomeClick} className={styles.link}>Home&nbsp;</span>
+        <span onClick={onHomeClick} className={styles.link}>
+          Home&nbsp;
+        </span>
         <span>| Post {singlePost.id}</span>
       </div>
       <Title title={singlePost.title} />
@@ -86,7 +86,9 @@ const SelectedPost = () => {
         </div>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <Loader />
+  );
 };
 
 export default SelectedPost;

@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ActivateUserPayload,
   SignInUserPayload,
-  SignUpUserPayload, UserInfoResponse,
+  SignUpUserPayload,
+  UserInfoResponse,
 } from "src/redux/@type";
 import { ACCESS_TOKEN_KEY } from "src/utils/constants";
 import { RootState } from "src/redux/store";
@@ -31,6 +32,7 @@ const authSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<UserInfoResponse | null>) => {
       state.userInfo = action.payload;
     },
+    logOutUser: (_, __: PayloadAction<undefined>) => {},
   },
 });
 
@@ -41,6 +43,7 @@ export const {
   setAccessToken,
   getUserInfo,
   setUserInfo,
+  logOutUser,
 } = authSlice.actions;
 export const authSelectors = {
   getLoggedIn: (state: RootState) => !!state.authReducer.accessToken,

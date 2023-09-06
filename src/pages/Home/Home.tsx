@@ -3,47 +3,82 @@ import { useEffect, useMemo, useState } from "react";
 import Title from "src/components/Title";
 import CardsList from "src/components/CardsList";
 import TabsList from "src/components/TabsList";
-import { PostsList, TabsTypes } from "src/@types";
+import { TabsTypes } from "src/@types";
 
 import styles from "./Home.module.scss";
 import SelectedPostModal from "src/pages/Home/SelectedPostModal";
 import SelectedImageModal from "./SelectedImageModal/SelectedImageModal";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostList, PostSelectors } from "src/redux/reducers/postSlice";
-import {authSelectors} from "src/redux/reducers/authSlice";
+import {
+  getMyPosts,
+  getPostsList,
+  PostSelectors,
+} from "src/redux/reducers/postSlice";
+import { authSelectors } from "src/redux/reducers/authSlice";
+import { PER_PAGE } from "src/utils/constants";
+import Paginate from "src/components/Pagination";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(TabsTypes.All);
   // const [isLoggedIn, setLoggedIn] = useState(false);
   // const [cardsList, setCardsList] = useState<PostsList>([]);
   const dispatch = useDispatch();
-  const cardsList = useSelector(PostSelectors.getPostList);
+  const allPostsList = useSelector(PostSelectors.getPostsList);
+  const myPosts = useSelector(PostSelectors.getMyPosts);
+  const totalCount = useSelector(PostSelectors.getTotalPostsCount);
+  const isListLoading = useSelector(PostSelectors.getPostsListLoading);
 
-    const isLoggedIn = useSelector(authSelectors.getLoggedIn);
+  const isLoggedIn = useSelector(authSelectors.getLoggedIn);
 
   const tabsList = useMemo(
     () => [
       { key: TabsTypes.All, title: "All Posts", disabled: false },
       { key: TabsTypes.Popular, title: "Popular Posts", disabled: false },
       {
-        key: TabsTypes.MyFavorite,
-        title: "Favourite Posts",
+        key: TabsTypes.MyPosts,
+        title: "My Posts",
         disabled: !isLoggedIn,
       },
     ],
     [isLoggedIn]
   );
 
+  //текущая страница, на которой мы находимся
+  const [currentPage, setCurrentPage] = useState(1);
+
+  //сколько итого у нас страниц
+  const pagesCount = useMemo(
+    () => Math.ceil(totalCount / PER_PAGE),
+    [totalCount]
+  );
+
   useEffect(() => {
-    // setCardsList(MOCK_ARRAY);
-    dispatch(getPostList());
-  }, []);
+    if (activeTab === TabsTypes.MyPosts) {
+      dispatch(getMyPosts());
+    } else {
+      // сколько надо пропустить постов (сколько мы уже посмотрели)
+      const offset = (currentPage - 1) * PER_PAGE;
+      dispatch(getPostsList({ offset, isOverwrite: true }));
+    }
+  }, [currentPage, activeTab]);
 
   const onTabClick = (tab: TabsTypes) => () => {
     setActiveTab(tab);
     // if (tab === TabsTypes.Popular) {
     //   setLoggedIn(true);
     // }
+  };
+
+  const tabsContextSwitcher = () => {
+    if (activeTab === TabsTypes.MyPosts) {
+      return myPosts;
+    } else {
+      return allPostsList;
+    }
+  };
+
+  const onPageChange = ({ selected }: { selected: number }) => {
+    setCurrentPage(selected + 1);
   };
 
   return (
@@ -54,7 +89,12 @@ const Home = () => {
         activeTab={activeTab}
         onTabClick={onTabClick}
       />
-      <CardsList cardsList={cardsList} />
+      <CardsList cardsList={tabsContextSwitcher()} isListLoading={isListLoading}/>
+      <Paginate
+        pagesCount={pagesCount}
+        onPageChange={onPageChange}
+        currentPage={currentPage}
+      />
       <SelectedPostModal />
       <SelectedImageModal />
     </div>

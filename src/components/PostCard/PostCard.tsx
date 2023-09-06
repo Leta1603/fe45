@@ -5,19 +5,20 @@ import {
   DislikeIcon,
   LikeIcon,
   MoreMenuIcon,
-} from "../assets/icons";
+} from "src/assets/icons";
 import classNames from "classnames";
 import { useThemeContext } from "src/context/Theme";
 import { LikeStatus, Post, Theme } from "src/@types";
 import { useSelector } from "react-redux";
 import { PostSelectors } from "src/redux/reducers/postSlice";
-import { FilledBookmarkIcon } from "src/components/assets/icons/FilledBookmarkIcon";
+import { FilledBookmarkIcon } from "src/assets/icons/FilledBookmarkIcon";
 import { useNavigate } from "react-router-dom";
 
 export enum PostCardSize {
   Large = "large",
   Medium = "medium",
   Small = "small",
+  Search = "search",
 }
 
 interface PostCardProps extends Post {

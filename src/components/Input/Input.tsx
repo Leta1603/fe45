@@ -1,4 +1,9 @@
-import React, { ChangeEvent, forwardRef, LegacyRef } from "react";
+import React, {
+  ChangeEvent,
+  forwardRef,
+  KeyboardEvent,
+  LegacyRef,
+} from "react";
 import classNames from "classnames";
 
 import { useThemeContext } from "src/context/Theme";
@@ -15,6 +20,7 @@ type InputProps = {
   errorText?: string;
   isTextarea?: boolean;
   className?: string;
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 
 const Input = forwardRef<
@@ -28,11 +34,23 @@ const Input = forwardRef<
     // а 2 - это ваша рефа
     ref
   ) => {
-    const { title, errorText, placeholder, onChange, disabled, value, isTextarea, className } = props;
+    const {
+      title,
+      errorText,
+      placeholder,
+      onChange,
+      disabled,
+      value,
+      isTextarea,
+      className,
+      onKeyDown,
+    } = props;
 
     const { themeValue } = useThemeContext();
 
-    const onInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const onInputChange = (
+      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
       onChange(event.target.value);
     };
 
@@ -44,6 +62,7 @@ const Input = forwardRef<
         [styles.disabled]: disabled,
         [styles.errorInput]: errorText,
       }),
+      onKeyDown
     };
 
     return (
