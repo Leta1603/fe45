@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-export type Post = {
+export interface Post {
   id: number;
   image: string;
   text?: string;

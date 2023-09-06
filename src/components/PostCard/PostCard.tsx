@@ -8,10 +8,11 @@ import {
 } from "../assets/icons";
 import classNames from "classnames";
 import { useThemeContext } from "src/context/Theme";
-import { LikeStatus, Theme } from "src/@types";
+import {LikeStatus, Post, Theme} from "src/@types";
 import { useSelector } from "react-redux";
 import { PostSelectors } from "src/redux/reducers/postSlice";
-import {FilledBookmarkIcon} from "src/components/assets/icons/FilledBookmarkIcon";
+import { FilledBookmarkIcon } from "src/components/assets/icons/FilledBookmarkIcon";
+import { useNavigate } from "react-router-dom";
 
 export enum PostCardSize {
   Large = "large",
@@ -19,12 +20,8 @@ export enum PostCardSize {
   Small = "small",
 }
 
-type PostCardProps = {
-  id: number;
-  image: string;
-  text?: string;
-  date: string;
-  title: string;
+interface PostCardProps extends Post{
+
   size: PostCardSize;
   onMoreClick?: () => void;
   onImageClick?: () => void;
@@ -52,12 +49,17 @@ const PostCard: FC<PostCardProps> = ({
   const dislikedIndex = dislikedPosts.findIndex((item) => item.id === id);
   const favouritePosts = useSelector(PostSelectors.getFavouritePosts);
   const favouriteIndex = favouritePosts.findIndex((item) => item.id === id);
+  const navigate = useNavigate();
+  const onTitleClick = () => {
+    navigate(`/post/${id}`);
+  };
   return (
     <div className={classNames(postCardStyle)}>
       <div className={styles.content}>
         <div className={styles.contentText}>
           <span className={styles.date}>{date}</span>
           <div
+            onClick={onTitleClick}
             className={classNames(styles.cardTitle, {
               [styles.darkTabTitle]: themeValue === Theme.Dark,
             })}
@@ -96,12 +98,15 @@ const PostCard: FC<PostCardProps> = ({
           </div>
         </div>
         <div className={styles.icons}>
-          <div onClick={()=> {onFavouriteClick()}}
+          <div
+            onClick={() => {
+              onFavouriteClick();
+            }}
             className={classNames(styles.icon, {
               [styles.darkIcon]: themeValue === Theme.Dark,
             })}
           >
-            {favouriteIndex === -1 ?  <BookmarkIcon /> : <FilledBookmarkIcon/>}
+            {favouriteIndex === -1 ? <BookmarkIcon /> : <FilledBookmarkIcon />}
           </div>
           {onMoreClick && (
             <div

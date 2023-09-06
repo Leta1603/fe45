@@ -6,6 +6,10 @@ import Input from "../../components/Input";
 import styles from "./SignUp.module.scss";
 import { useThemeContext } from "src/context/Theme";
 import { Theme } from "src/@types";
+import { useDispatch } from "react-redux";
+import { signUpUser } from "src/redux/reducers/authSlice";
+import { useNavigate } from "react-router-dom";
+import { RoutesList } from "src/pages/Router";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -13,6 +17,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { themeValue } = useThemeContext();
 
   // мы создаем сначала экземпляр нашей ref и говорим, что у нее будет тип HTMLInputElement | null
@@ -24,11 +30,24 @@ const SignUp = () => {
     }
   }, []);
 
+  const onSignInClick = () => {
+    navigate(RoutesList.SignIn);
+  };
+
+  const onSubmit = () => {
+    const data = {
+      username: name,
+      email,
+      password,
+    };
+    dispatch(signUpUser({ data, callback: () => {} }));
+  };
+
   return (
     <FormPagesContainer
       title={"Sign Up"}
       btnTitle={"Sign Up"}
-      onSubmit={() => {}}
+      onSubmit={onSubmit}
       additionalInfo={
         <div
           className={classNames(styles.additionalInfo, {
@@ -36,13 +55,31 @@ const SignUp = () => {
           })}
         >
           {"Already have an account?"}
-          <span className={styles.signIn}>Sign In</span>
+          <span onClick={onSignInClick} className={styles.signIn}>
+            Sign In
+          </span>
         </div>
       }
     >
-      <Input title={"Name"} placeholder={"Your name"} onChange={setName} value={name} ref={inputRef} />
-      <Input title={"Email"} placeholder={"Your email"} onChange={setEmail} value={email} />
-      <Input title={"Password"} placeholder={"Your password"} onChange={setPassword} value={password} />
+      <Input
+        title={"Name"}
+        placeholder={"Your name"}
+        onChange={setName}
+        value={name}
+        ref={inputRef}
+      />
+      <Input
+        title={"Email"}
+        placeholder={"Your email"}
+        onChange={setEmail}
+        value={email}
+      />
+      <Input
+        title={"Password"}
+        placeholder={"Your password"}
+        onChange={setPassword}
+        value={password}
+      />
       <Input
         title={"Confirm Password"}
         placeholder={"Confirm password"}
