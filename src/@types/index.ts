@@ -7,6 +7,7 @@ export interface Post {
   date: string;
   lesson_num: number;
   title: string;
+  description: string;
   author?: number;
 }
 export type PostsList = Post[];
@@ -14,7 +15,7 @@ export type PostsList = Post[];
 export enum TabsTypes {
   All = "all",
   MyPosts = "myPosts",
-  Popular = "popular",
+  Favourite = "favourite",
 }
 
 export type Tab = {
@@ -39,4 +40,9 @@ export enum LikeStatus {
 export enum FavouriteStatus {
   Favourite = "favourite",
   NotFavourite = "notFavourite",
+}
+
+export enum Order {
+  Date = "date",
+  Title = "title",
 }

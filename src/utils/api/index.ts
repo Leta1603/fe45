@@ -2,6 +2,7 @@ import { create } from "apisauce";
 
 import {
   ActivateUserData,
+  ResetPasswordConfirmationData,
   SignInUserData,
   SignUpUserData,
 } from "src/redux/@type";
@@ -15,8 +16,8 @@ const signUpUser = (data: SignUpUserData) => {
   return API.post("/auth/users/", data);
 };
 
-const getPosts = (offset: number, search?: string) => {
-  return API.get("/blog/posts", { limit: PER_PAGE, offset, search });
+const getPosts = (offset: number, search?: string, ordering?: string) => {
+  return API.get("/blog/posts", { limit: PER_PAGE, offset, search, ordering });
 };
 
 const getSinglePost = (id: string) => {
@@ -63,6 +64,41 @@ const getMyPosts = (token: string) => {
   );
 };
 
+const addPost = (token: string, data: any) => {
+  return API.post("/blog/posts/", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+const deletePost = (token: string, id: number) => {
+  return API.delete(
+    `/blog/posts/${id}/`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+const editPost = (token: string, id: number, data: any) => {
+  return API.put(`/blog/posts/${id}/`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+const resetPassword = (email: string) => {
+  return API.post("/auth/users/reset_password/", { email });
+};
+
+const resetPasswordConfirmation = (data: ResetPasswordConfirmationData) => {
+  return API.post("/auth/users/reset_password_confirm/", data);
+};
+
 export default {
   signUpUser,
   getPosts,
@@ -73,4 +109,9 @@ export default {
   refreshToken,
   getUserInfo,
   getMyPosts,
+  addPost,
+  deletePost,
+  editPost,
+  resetPassword,
+  resetPasswordConfirmation,
 };

@@ -59,6 +59,7 @@ export type RefreshResponseData = {
 export type GetPostsPayload = {
   offset: number;
   isOverwrite: boolean;
+  ordering?: string;
 };
 
 export type SetPostsListPayload = {
@@ -77,5 +78,29 @@ export type GetPostsResponseData = {
 export type GetSearchedPostsPayload = {
   offset: number;
   search: string;
+  isOverwrite: boolean;
 };
-export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">;
+
+export type SetSearchedPostsPayload = SetPostsListPayload;
+
+export type AddPostDataPayload = PayloadWithDataAndCallback<any>;
+
+export type DeletePostPayload = PayloadWithDataAndCallback<number>;
+
+export type EditPostData = {
+  postId: number;
+  newData: any;
+};
+
+export type EditPostPayload = PayloadWithDataAndCallback<EditPostData>;
+
+export type ResetPasswordPayload = PayloadWithDataAndCallback<string>;
+
+export type ResetPasswordConfirmationData = {
+  uid: string;
+  token: string;
+  new_password: string;
+};
+
+export type ResetPasswordConfirmationPayload =
+  PayloadWithDataAndCallback<ResetPasswordConfirmationData>;

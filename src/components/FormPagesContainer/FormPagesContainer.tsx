@@ -16,6 +16,7 @@ type FormPagesContainerProps = {
   btnTitle: string;
   onSubmit: () => void;
   additionalInfo?: ReactElement;
+  isSubmitDisabled?: boolean;
 };
 
 const FormPagesContainer: FC<FormPagesContainerProps> = ({
@@ -24,6 +25,7 @@ const FormPagesContainer: FC<FormPagesContainerProps> = ({
   btnTitle,
   onSubmit,
   additionalInfo,
+  isSubmitDisabled,
 }) => {
   const { themeValue } = useThemeContext();
   const navigate = useNavigate();
@@ -49,6 +51,7 @@ const FormPagesContainer: FC<FormPagesContainerProps> = ({
           title={btnTitle}
           onClick={onSubmit}
           className={styles.button}
+          disabled={isSubmitDisabled}
         />
         <div>{additionalInfo}</div>
       </div>

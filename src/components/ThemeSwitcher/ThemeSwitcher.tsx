@@ -14,6 +14,7 @@ const ThemeSwitcher = () => {
       <div
         className={classNames(styles.button, {
           [styles.activeButton]: themeValue === Theme.Light,
+          [styles.notActiveButton]: themeValue === Theme.Dark,
         })}
         onClick={onChangeTheme(Theme.Light)}
       >
@@ -21,7 +22,8 @@ const ThemeSwitcher = () => {
       </div>
       <div
         className={classNames(styles.button, {
-          [styles.activeButton]: themeValue === Theme.Dark,
+          [styles.activeButtonDark]: themeValue === Theme.Dark,
+          // [styles.notActiveButton]: themeValue === Theme.Light,
         })}
         onClick={onChangeTheme(Theme.Dark)}
       >

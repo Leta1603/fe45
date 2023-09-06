@@ -11,6 +11,8 @@ import { Theme } from "src/@types";
 import { getSinglePost, PostSelectors } from "src/redux/reducers/postSlice";
 import { RoutesList } from "src/pages/Router";
 import Loader from "src/components/Loader";
+import Button, { ButtonTypes } from "src/components/Button";
+import { authSelectors } from "src/redux/reducers/authSlice";
 
 const SelectedPost = () => {
   const { themeValue } = useThemeContext();
@@ -20,6 +22,8 @@ const SelectedPost = () => {
   const isSinglePostLoading = useSelector(PostSelectors.getSinglePostLoading);
   const navigate = useNavigate();
 
+  const userInfo = useSelector(authSelectors.getUserInfo);
+
   useEffect(() => {
     if (id) {
       dispatch(getSinglePost(id));
@@ -28,6 +32,10 @@ const SelectedPost = () => {
 
   const onHomeClick = () => {
     navigate(RoutesList.Home);
+  };
+
+  const onClickEdit = () => {
+    navigate(`/posts/${singlePost?.id}/edit`);
   };
 
   return singlePost && !isSinglePostLoading ? (
@@ -81,6 +89,13 @@ const SelectedPost = () => {
                 <BookmarkIcon />
                 Add to favorites
               </div>
+              {singlePost.author === userInfo?.id && (
+                <Button
+                  type={ButtonTypes.Secondary}
+                  title={"Edit post"}
+                  onClick={onClickEdit}
+                />
+              )}
             </div>
           </div>
         </div>

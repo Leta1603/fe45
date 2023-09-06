@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useMemo, useState } from "react";
+import React, { KeyboardEvent, useEffect, useMemo, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useThemeContext } from "src/context/Theme";
 import { RoutesList } from "src/pages/Router";
@@ -14,17 +14,24 @@ import { CloseIcon, MenuIcon, SearchIcon, UserIcon } from "src/assets/icons";
 import Input from "../Input/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors, logOutUser } from "src/redux/reducers/authSlice";
-import {clearSearchedPosts} from "src/redux/reducers/postSlice";
+import {
+  clearSearchedPosts,
+  getSearchedPosts,
+  PostSelectors,
+} from "src/redux/reducers/postSlice";
 
 const Header = () => {
   const { themeValue } = useThemeContext();
 
+  const searchedPosts = useSelector(PostSelectors.getSearchedPosts);
   const isLoggedIn = useSelector(authSelectors.getLoggedIn);
   const userInfo = useSelector(authSelectors.getUserInfo);
 
   const [isOpened, setOpened] = useState(false);
   const [isSearch, setSearch] = useState(false);
+
   const [inputValue, setInputValue] = useState("");
+  const [isDropdownOpened, setDropdownOpened] = useState(false);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -32,10 +39,18 @@ const Header = () => {
   const navLinks = useMemo(
     () => [
       { path: RoutesList.Home, title: "Home" },
-      ...(isLoggedIn ? [{ path: RoutesList.SignUp, title: "Add Post" }] : []),
+      ...(isLoggedIn ? [{ path: RoutesList.AddPost, title: "Add Post" }] : []),
     ],
     [isLoggedIn]
   );
+
+  useEffect(() => {
+    if (inputValue.length) {
+      dispatch(getSearchedPosts({ search: inputValue, offset: 0, isOverwrite: true }));
+    } else {
+      dispatch(clearSearchedPosts());
+    }
+  }, [inputValue, isSearch]);
 
   const handleMenuOpened = () => {
     setOpened(!isOpened);
@@ -43,6 +58,7 @@ const Header = () => {
 
   const handleSearchOpened = () => {
     setSearch(!isSearch);
+    setDropdownOpened(true);
     if (isSearch && inputValue) {
       dispatch(clearSearchedPosts());
       navigate(`posts/${inputValue}`);
@@ -56,6 +72,13 @@ const Header = () => {
 
   const onLogout = () => {
     dispatch(logOutUser());
+  };
+
+  const onClickDropdownItem = (id: number) => () => {
+    setDropdownOpened(false);
+    navigate(`/post/${id}`);
+    setSearch(!isSearch);
+    setInputValue("");
   };
 
   const onKeyDown = (
@@ -94,10 +117,30 @@ const Header = () => {
               onClick={handleSearchOpened}
               className={styles.closedSearch}
             />
+            {!!searchedPosts.length && isDropdownOpened && (
+              <div className={styles.dropdown}>
+                {searchedPosts.map(({ title, image, id, text }) => (
+                  <div
+                    key={id}
+                    onClick={onClickDropdownItem(id)}
+                    className={styles.dropdownItem}
+                  >
+                    <img src={image} alt="" />
+                    <div className={styles.dropdownItemInfo}>
+                      <div className={styles.dropdownItemTitle}>{title}</div>
+                      <div className={styles.dropdownItemDescription}>
+                        {text}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div></div>
         )}
+
         <div className={styles.rightPartOfHeader}>
           <Button
             type={ButtonTypes.Primary}
@@ -131,7 +174,11 @@ const Header = () => {
         </div>
       </div>
       {isOpened && (
-        <div className={styles.menuContainer}>
+        <div
+          className={classNames(styles.menuContainer, {
+            [styles.darkMenuContainer]: themeValue === Theme.Dark,
+          })}
+        >
           <div>
             {isLoggedIn && userInfo && (
               <Username username={userInfo.username} />
@@ -140,7 +187,9 @@ const Header = () => {
               <NavLink
                 to={link.path}
                 key={link.path}
-                className={styles.navLinkButton}
+                className={classNames(styles.navLinkButton, {
+                  [styles.darkNavLinkButton]: themeValue === Theme.Dark,
+                })}
               >
                 {link.title}
               </NavLink>
@@ -152,7 +201,9 @@ const Header = () => {
               type={ButtonTypes.Secondary}
               title={isLoggedIn ? "Log Out" : "Sign In"}
               onClick={isLoggedIn ? onLogout : onLoginButtonClick}
-              className={styles.authButton}
+              className={classNames(styles.authButton, {
+                [styles.darkAuthButton]: themeValue === Theme.Dark,
+              })}
             />
           </div>
         </div>
