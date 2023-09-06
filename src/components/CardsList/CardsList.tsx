@@ -1,10 +1,18 @@
 import React, { FC } from "react";
-import { Post, PostsList } from "../../@types";
+import { LikeStatus, Post, PostsList } from "../../@types";
 import PostCard, { PostCardSize } from "../PostCard";
 import styles from "./CardsList.module.scss";
 import { useDispatch } from "react-redux";
-import { setSelectedPost, setSelectedPostModalOpened } from "src/redux/reducers/postSlice";
-import { setSelectedImage, setSelectedImageModalOpened } from "src/redux/reducers/imageSlice";
+import {
+  setFavouritesPosts,
+  setLikeStatus,
+  setSelectedPost,
+  setSelectedPostModalOpened,
+} from "src/redux/reducers/postSlice";
+import {
+  setSelectedImage,
+  setSelectedImageModalOpened,
+} from "src/redux/reducers/imageSlice";
 
 type CardsListProps = {
   cardsList: PostsList;
@@ -24,6 +32,14 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
     dispatch(setSelectedImageModalOpened(true));
     dispatch(setSelectedImage(image));
   };
+
+  const onStatusClick = (card: Post) => (status: LikeStatus) => {
+    dispatch(setLikeStatus({ card, status }));
+  };
+
+  const onFavouriteClick = (card: Post) => () => {
+    dispatch(setFavouritesPosts({ card }));
+  };
   return cardsList.length ? (
     <div className={styles.cardListcontainer}>
       <div>
@@ -32,6 +48,8 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
           {...cardsList[0]}
           onMoreClick={onMoreClick(cardsList[0])}
           onImageClick={onImageClick(cardsList[0].image)}
+          onStatusClick={onStatusClick(cardsList[0])}
+          onFavouriteClick={onFavouriteClick(cardsList[0])}
         />
         <div className={styles.medium}>
           {cardsList.map((el, idx) => {
@@ -43,6 +61,8 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                   {...el}
                   onMoreClick={onMoreClick(el)}
                   onImageClick={onImageClick(el.image)}
+                  onStatusClick={onStatusClick(el)}
+                  onFavouriteClick={onFavouriteClick(el)}
                 />
               );
             }
@@ -59,6 +79,8 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                 {...el}
                 onMoreClick={onMoreClick(el)}
                 onImageClick={onImageClick(el.image)}
+                onStatusClick={onStatusClick(el)}
+                onFavouriteClick={onFavouriteClick(el)}
               />
             );
           }
